@@ -276,7 +276,7 @@ const About = () => {
             <motion.div variants={item} className="wrapper">
               <img
                 className="img"
-                src="/src/assets/me.jpg"
+                src="/me.jpg"
                 alt="Headshot"
                 width="100%"
                 height="auto"
