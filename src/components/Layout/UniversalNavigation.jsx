@@ -14,22 +14,31 @@ const NavigationContainer = styled.div`
 `;
 
 const SectionPinContainer = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   align-items: center;
-  width: 100%;
   background: rgba(10, 25, 47, 0.85);
   backdrop-filter: blur(10px);
   padding: 10px clamp(20px, 5vw, 50px);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 11;
+  
+  @media (max-width: 768px) {
+    padding: 8px clamp(15px, 4vw, 30px);
+  }
 `;
 
 const SectionPinContent = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 20px;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 const Logo = styled.img`
@@ -38,6 +47,11 @@ const Logo = styled.img`
   cursor: pointer;
   border-radius: 50%;
   transition: transform 0.3s ease;
+
+  @media (max-width: 768px) {
+    width: 35px;
+    height: 35px;
+  }
 
   &:hover {
     transform: scale(1.1);
@@ -51,6 +65,10 @@ const SectionPinText = styled(motion.h2)`
   margin: 0;
   text-align: left;
   text-transform: capitalize;
+
+  @media (max-width: 768px) {
+    font-size: clamp(12px, 1.8vw, 14px);
+  }
 `;
 
 const DesktopNav = styled.nav`
