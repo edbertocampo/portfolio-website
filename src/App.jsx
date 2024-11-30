@@ -24,11 +24,6 @@ const ContentContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 clamp(25px, 5vw, 150px);
-  padding-top: 60px;
-
-  @media (max-width: 768px) {
-    padding-top: 50px;
-  }
   width: 100%;
 `;
 

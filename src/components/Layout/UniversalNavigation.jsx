@@ -8,7 +8,7 @@ const NavigationContainer = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 10;
+  z-index: 999;
   display: flex;
   flex-direction: column;
 `;
@@ -20,25 +20,21 @@ const SectionPinContainer = styled(motion.div)`
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
   background: rgba(10, 25, 47, 0.85);
   backdrop-filter: blur(10px);
   padding: 10px clamp(20px, 5vw, 50px);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 11;
-  
-  @media (max-width: 768px) {
-    padding: 8px clamp(15px, 4vw, 30px);
-  }
+  z-index: 998;
 `;
 
 const SectionPinContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  gap: 20px;
 `;
 
 const Logo = styled.img`
@@ -47,11 +43,8 @@ const Logo = styled.img`
   cursor: pointer;
   border-radius: 50%;
   transition: transform 0.3s ease;
-
-  @media (max-width: 768px) {
-    width: 35px;
-    height: 35px;
-  }
+  position: relative;
+  z-index: 1000;
 
   &:hover {
     transform: scale(1.1);
@@ -63,48 +56,51 @@ const SectionPinText = styled(motion.h2)`
   font-family: 'Roboto Mono', monospace;
   font-size: clamp(14px, 2vw, 16px);
   margin: 0;
-  text-align: left;
-  text-transform: capitalize;
-
-  @media (max-width: 768px) {
-    font-size: clamp(12px, 1.8vw, 14px);
-  }
-`;
-
-const DesktopNav = styled.nav`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
-  padding: 10px clamp(20px, 5vw, 50px);
-  background: rgba(10, 25, 47, 0.85);
-  backdrop-filter: blur(10px);
-  transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
-
-  @media (max-width: 1024px) {
-    display: none;
-  }
+  opacity: ${props => props.show ? 1 : 0};
+  transition: opacity 0.3s ease;
 `;
 
 const NavLinks = styled.div`
   display: flex;
-  gap: clamp(20px, 3vw, 30px);
+  gap: clamp(20px, 4vw, 40px);
+  align-items: center;
+  margin-left: auto;
 
-  @media (max-width: 1024px) {
-    display: none;
-  }
-`;
+  a {
+    color: var(--slate);
+    text-decoration: none;
+    font-family: 'Roboto Mono', monospace;
+    font-size: clamp(12px, 1.4vw, 14px);
+    transition: color 0.3s ease;
+    position: relative;
+    cursor: pointer;
 
-const NavLink = styled.a`
-  color: #ccd6f6;
-  text-decoration: none;
-  font-family: 'Roboto Mono', monospace;
-  font-size: clamp(12px, 1.5vw, 13px);
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
-  
-  &:hover {
-    color: #64ffda;
+    &:hover {
+      color: var(--green);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--green);
+      transition: width 0.3s ease;
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+
+    &.active {
+      color: var(--green);
+      
+      &::after {
+        width: 100%;
+      }
+    }
   }
 `;
 
@@ -122,11 +118,26 @@ const UniversalNavigation = ({ logoSrc }) => {
   const [activeSection, setActiveSection] = useState('home');
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [showSectionName, setShowSectionName] = useState(false);
   const observerRefs = useRef({});
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 50; 
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({
+        top: elementPosition - offset,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      
+      setShowSectionName(currentScrollY > 100);
       
       setIsNavVisible(currentScrollY < 100 || currentScrollY < lastScrollY);
       
@@ -168,59 +179,43 @@ const UniversalNavigation = ({ logoSrc }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   const currentSectionName = sections.find(section => section.id === activeSection)?.name || '';
 
   return (
     <NavigationContainer>
-      {/* Section Pin with Logo - Always visible when scrolling */}
       <AnimatePresence>
-        {!isNavVisible && currentSectionName && (
-          <SectionPinContainer
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            transition={{ duration: 0.3 }}
-          >
-            <SectionPinContent>
-              <Logo 
-                src={logoSrc} 
-                alt="Edbert Ocampo Logo" 
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
-              />
-              <SectionPinText>{currentSectionName}</SectionPinText>
-            </SectionPinContent>
-          </SectionPinContainer>
-        )}
-      </AnimatePresence>
-
-      {/* Desktop Navigation - Only visible on desktop */}
-      <AnimatePresence>
-        {isNavVisible && (
-          <DesktopNav
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            transition={{ duration: 0.3 }}
-          >
-            <NavLinks>
-              {sections.slice(1).map((section) => (
-                <NavLink 
-                  key={section.id} 
-                  onClick={() => scrollToSection(section.id)}
-                >
-                  {section.name}
-                </NavLink>
-              ))}
-            </NavLinks>
-          </DesktopNav>
-        )}
+        <SectionPinContainer
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -50 }}
+          transition={{ duration: 0.3 }}
+        >
+          <SectionPinContent>
+            <Logo 
+              src={logoSrc} 
+              alt="Edbert Ocampo Logo" 
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
+            />
+            {!showSectionName && (
+              <NavLinks>
+                {sections.map((section) => (
+                  <a 
+                    key={section.id}
+                    href={`#${section.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(section.id);
+                    }}
+                    className={activeSection === section.id ? 'active' : ''}
+                  >
+                    {section.name}
+                  </a>
+                ))}
+              </NavLinks>
+            )}
+            <SectionPinText show={showSectionName}>{currentSectionName}</SectionPinText>
+          </SectionPinContent>
+        </SectionPinContainer>
       </AnimatePresence>
     </NavigationContainer>
   );
