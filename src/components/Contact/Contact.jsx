@@ -5,7 +5,7 @@ import { FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
 
 const StyledContactSection = styled.section`
   max-width: 600px;
-  margin-left: 320px;
+  margin-left: auto;
   margin-bottom: 150px;
   padding: 40px 0;
   text-align: center;
@@ -17,13 +17,13 @@ const StyledContactSection = styled.section`
 
   @media (max-width: 768px) {
     padding: 30px 0;
-    margin: 0 auto;
+    margin-left: auto;
     margin-bottom: 100px;
   }
 
   @media (max-width: 480px) {
     padding: 20px 0;
-    margin: 0 auto;
+    margin-left: auto;
     margin-bottom: 100px;
   }
 `;
