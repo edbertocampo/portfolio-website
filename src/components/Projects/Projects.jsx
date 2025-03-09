@@ -6,9 +6,16 @@ import { FiGithub, FiExternalLink, FiFolder } from 'react-icons/fi';
 const Projects = () => {
   const projectsList = [
     {
-      title: 'Web & Application Development',
+      title: 'Task Mate Now',
+      description: 'A modern to-do list application with an intuitive interface for task management.',
+      technologies: ['HTML', 'TypeScript', 'JavaScript' ,'Styled Components', 'Vercel'],
+      githubLink: 'https://github.com/edbertocampo/to-do-list-2.0',
+      externalLink: 'https://task-mate-now.vercel.app/'
+    },
+    {
+      title: 'INGAT BATANGAS: City Emergency Response Application with Incident Management System',
       description: 'Emergency response application to alert nearby emergency stations about life-threatening situations.',
-      technologies: ['Laravel', 'ReactJS', 'React Native', 'Linode Object Storage', 'NGINX'],
+      technologies: ['Laravel', 'ReactJS', 'Linode Object Storage', 'NGINX' , 'API', 'SQL'],
       githubLink: 'https://github.com/edbertocampo/INGATBATANGAS',
       externalLink: null
     },
@@ -34,6 +41,7 @@ const Projects = () => {
       externalLink: null
     }
   ];
+  
 
   return (
     <StyledProjectsSection id="projects">
