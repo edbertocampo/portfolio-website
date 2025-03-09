@@ -24,7 +24,7 @@ const Projects = () => {
       description: 'A simple plant catalog using XML, HTML, and CSS, offering an easy-to-navigate display of various plants.',
       technologies: ['XML', 'HTML', 'CSS'],
       githubLink: 'https://github.com/edbertocampo/Plant-Info',
-      externalLink: null
+      externalLink: 'https://plant-catalog.vercel.app/'
     },
     {
       title: 'PHP Web Development',
