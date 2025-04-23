@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiDownload } from 'react-icons/fi';
 
+
 const StyledHeroSection = styled.section`
   display: flex;
   justify-content: center;

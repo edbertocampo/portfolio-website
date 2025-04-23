@@ -241,7 +241,7 @@ const Contact = () => {
         </SocialLinks>
 
         <ResumeLink 
-          href="/Ocampo Edbert Resume.pdf" 
+          href="/Ocampo Edbert(Resume).pdf" 
           download
           variants={item}
         >
