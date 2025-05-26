@@ -6,6 +6,13 @@ import { FiGithub, FiExternalLink, FiFolder } from 'react-icons/fi';
 const Projects = () => {
   const projectsList = [
     {
+      title: 'Attendify',
+      description: 'A Digital Solution for Hassle-Free Attendance',
+      technologies: ['TypeScript', 'ReactJS', 'JavaScript' ,'Material UI (MUI)', 'Firebase', 'MongoDB', 'Vercel'],
+      githubLink: 'https://github.com/edbertocampo/attendify',
+      externalLink: 'https://attendify-edu.vercel.app/'
+    },
+    {
       title: 'Task Mate Now',
       description: 'A modern to-do list application with an intuitive interface for task management.',
       technologies: ['HTML', 'TypeScript', 'JavaScript' ,'Styled Components', 'Vercel'],
