@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiDownload } from 'react-icons/fi';
+import BytesToText from '../common/BytesToText';
 
 
 const StyledHeroSection = styled.section`
@@ -9,7 +10,7 @@ const StyledHeroSection = styled.section`
   justify-content: center;
   flex-direction: column;
   align-items: flex-start;
-  
+  white-space: pre-wrap;
   padding: 0 clamp(20px, 5vw, 50px);
   max-width: 1000px;
   margin-top: 184px;
@@ -45,6 +46,8 @@ const StyledDescription = styled(motion.p)`
   color: var(--slate);
   font-size: clamp(15px, 2.3vw, 18px);
   line-height: 1.5;
+  word-spacing: 2px;
+  text-align: left;
 
   @media (max-width: 480px) {
     max-width: 100%;
@@ -131,12 +134,21 @@ const Hero = () => {
         initial="hidden"
         animate="show"
       >
-        <StyledGreeting variants={item}>Hi, my name is</StyledGreeting>
-        <StyledName variants={item}>Edbert.</StyledName>
-        <StyledSubtitle variants={item}>I build things for the web.</StyledSubtitle>
+        <StyledGreeting variants={item}>
+          <BytesToText text="Hi, my name is " delay={0} speed={20} />
+        </StyledGreeting>
+        <StyledName variants={item}>
+          <BytesToText text="Edbert." delay={800} speed={20} />
+        </StyledName>
+        <StyledSubtitle variants={item}>
+          <BytesToText text="I build things for the web." delay={1400} speed={20} />
+        </StyledSubtitle>
         <StyledDescription variants={item}>
-          Aspiring QA Engineer/ Web Developer/ VA Freelancer/ Professor
-          passionate about delivering high-quality digital solutions and ensuring exceptional user experiences.
+          <BytesToText 
+            text="Aspiring QA Engineer / Web Developer / VA Freelancer / Professor passionate about delivering high-quality digital solutions and ensuring exceptional user experiences."
+            delay={2000}
+            speed={20}
+          />
         </StyledDescription>
 
         <StyledResumeButton 
