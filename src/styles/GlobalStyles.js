@@ -4,14 +4,24 @@ import '@fontsource/roboto-mono';
 
 const GlobalStyles = createGlobalStyle`
   :root {
-    --navy: #0a192f;
-    --light-navy: #112240;
-    --lightest-navy: #233554;
-    --slate: #8892b0;
-    --light-slate: #a8b2d1;
-    --lightest-slate: #ccd6f6;
-    --white: #e6f1ff;
-    --green: #64ffda;
+    --navy: #213448;
+    --light-navy: #547792;
+    --lightest-navy: #547792;
+    --slate: #94B4C1;
+    --light-slate: #bfd1db;
+    --lightest-slate: #EAE0CF;
+    --white: #EAE0CF;
+    --green: #EAE0CF;
+    --green-tint: rgba(234, 224, 207, 0.1);
+    
+    /* Layout */
+    --section-max-width: 1000px;
+    --section-padding-x: clamp(20px, 5vw, 50px);
+
+    /* Typography */
+    --font-heading: 'Lexend', sans-serif;
+    --font-body: 'Figtree', sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
   }
 
   * {
@@ -22,6 +32,8 @@ const GlobalStyles = createGlobalStyle`
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
   }
 
   body {
@@ -32,14 +44,14 @@ const GlobalStyles = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     background-color: var(--navy);
     color: var(--slate);
-    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    font-family: var(--font-body);
     font-size: 16px;
     line-height: 1.3;
 
     section {
       margin: 0 auto;
       padding: 100px 0;
-      max-width: 1000px;
+      max-width: 10000px;
 
       @media (max-width: 768px) {
         padding: 80px 0;
@@ -53,6 +65,7 @@ const GlobalStyles = createGlobalStyle`
 
   h1, h2, h3, h4, h5, h6 {
     color: var(--lightest-slate);
+    font-family: var(--font-heading);
     font-weight: 600;
     line-height: 1.1;
   }
@@ -86,9 +99,23 @@ const GlobalStyles = createGlobalStyle`
       display: block;
       position: relative;
       width: 300px;
+      max-width: 100%; 
       height: 1px;
       margin-left: 20px;
       background-color: var(--lightest-navy);
+      flex-shrink: 1; 
+
+      @media (max-width: 768px) {
+        width: 100%; 
+        max-width: 200px;
+      }
+
+      @media (max-width: 480px) {
+        margin-left: 10px;
+        width: 100%; 
+        max-width: 100px; 
+        flex: 1; 
+      }
     }
   }
 `;

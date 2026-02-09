@@ -8,7 +8,7 @@ const BlurBackground = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: -1;
   overflow: hidden;
 `;
 
@@ -18,8 +18,8 @@ const BlurEffect = styled.div`
   height: 600px;
   background: radial-gradient(
     circle at center, 
-    rgba(100, 255, 218, 0.05) 0%, 
-    rgba(100, 255, 218, 0.03) 50%, 
+    rgba(234, 224, 207, 0.1) 0%, 
+    rgba(234, 224, 207, 0.05) 50%, 
     transparent 80%
   );
   border-radius: 40%;
@@ -27,7 +27,7 @@ const BlurEffect = styled.div`
   pointer-events: none;
   transition: transform 0.1s ease-out, opacity 0.2s ease;
   filter: blur(30px);
-  opacity: 0.6;
+  opacity: 0.4;
 
   @media (max-width: 768px) {
     width: 400px;
@@ -51,11 +51,11 @@ const MouseFollowBlur = () => {
 
   return (
     <BlurBackground>
-      <BlurEffect 
-        style={{ 
-          left: `${position.x}px`, 
-          top: `${position.y}px` 
-        }} 
+      <BlurEffect
+        style={{
+          left: `${position.x}px`,
+          top: `${position.y}px`
+        }}
       />
     </BlurBackground>
   );

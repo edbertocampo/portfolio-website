@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FiMenu, FiX } from 'react-icons/fi';
 
 const NavigationContainer = styled.div`
   position: fixed;
@@ -21,7 +22,7 @@ const SectionPinContainer = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(10, 25, 47, 0.85);
+  background: rgba(33, 52, 72, 0.85);
   backdrop-filter: blur(10px);
   padding: 10px clamp(20px, 5vw, 50px);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -44,7 +45,7 @@ const Logo = styled.img`
   border-radius: 50%;
   transition: transform 0.3s ease;
   position: relative;
-  z-index: 1000;
+  z-index: 1001;
 
   &:hover {
     transform: scale(1.1);
@@ -53,11 +54,15 @@ const Logo = styled.img`
 
 const SectionPinText = styled(motion.h2)`
   color: var(--green);
-  font-family: 'Roboto Mono', monospace;
+  font-family: var(--font-heading);
   font-size: clamp(14px, 2vw, 16px);
   margin: 0;
   opacity: ${props => props.show ? 1 : 0};
   transition: opacity 0.3s ease;
+  
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const NavLinks = styled.div`
@@ -66,10 +71,14 @@ const NavLinks = styled.div`
   align-items: center;
   margin-left: auto;
 
+  @media (max-width: 768px) {
+    display: none;
+  }
+
   a {
     color: var(--slate);
     text-decoration: none;
-    font-family: 'Roboto Mono', monospace;
+    font-family: var(--font-heading);
     font-size: clamp(12px, 1.4vw, 14px);
     transition: color 0.3s ease;
     position: relative;
@@ -104,8 +113,67 @@ const NavLinks = styled.div`
   }
 `;
 
+const MobileMenuButton = styled.button`
+  display: none;
+  background: none;
+  border: none;
+  color: var(--green);
+  cursor: pointer;
+  z-index: 1001;
+  padding: 0;
+
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+`;
+
+const MobileMenuOverlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(33, 52, 72, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MobileNavLinks = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+
+  a {
+    color: var(--slate);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-size: 18px;
+    transition: color 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--green);
+    }
+
+    &.active {
+      color: var(--green);
+    }
+  }
+`;
+
 const sections = [
-  { id: 'home', name: '' },
+  { id: 'home', name: 'Home' },
   { id: 'about', name: 'About' },
   { id: 'experience', name: 'Experience' },
   { id: 'projects', name: 'Projects' },
@@ -119,28 +187,30 @@ const UniversalNavigation = ({ logoSrc }) => {
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [showSectionName, setShowSectionName] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const observerRefs = useRef({});
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const offset = 50; 
+      const offset = 50;
       const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
       window.scrollTo({
         top: elementPosition - offset,
         behavior: 'smooth'
       });
+      setIsMobileMenuOpen(false);
     }
   };
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       setShowSectionName(currentScrollY > 100);
-      
+
       setIsNavVisible(currentScrollY < 100 || currentScrollY < lastScrollY);
-      
+
       const observerOptions = {
         root: null,
         rootMargin: '-50px 0px -50% 0px',
@@ -179,6 +249,18 @@ const UniversalNavigation = ({ logoSrc }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
+  // Prevent scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
   const currentSectionName = sections.find(section => section.id === activeSection)?.name || '';
 
   return (
@@ -191,15 +273,15 @@ const UniversalNavigation = ({ logoSrc }) => {
           transition={{ duration: 0.3 }}
         >
           <SectionPinContent>
-            <Logo 
-              src={logoSrc} 
-              alt="Edbert Ocampo Logo" 
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
+            <Logo
+              src={logoSrc}
+              alt="Edbert Ocampo Logo"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             />
             {!showSectionName && (
               <NavLinks>
-                {sections.map((section) => (
-                  <a 
+                {sections.filter(s => s.name !== 'Home').map((section) => (
+                  <a
                     key={section.id}
                     href={`#${section.id}`}
                     onClick={(e) => {
@@ -214,8 +296,39 @@ const UniversalNavigation = ({ logoSrc }) => {
               </NavLinks>
             )}
             <SectionPinText show={showSectionName}>{currentSectionName}</SectionPinText>
+
+            <MobileMenuButton onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              {isMobileMenuOpen ? <FiX /> : <FiMenu />}
+            </MobileMenuButton>
           </SectionPinContent>
         </SectionPinContainer>
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <MobileMenuOverlay
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
+          >
+            <MobileNavLinks>
+              {sections.map((section) => (
+                <a
+                  key={section.id}
+                  href={`#${section.id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection(section.id);
+                  }}
+                  className={activeSection === section.id ? 'active' : ''}
+                >
+                  {section.name}
+                </a>
+              ))}
+            </MobileNavLinks>
+          </MobileMenuOverlay>
+        )}
       </AnimatePresence>
     </NavigationContainer>
   );

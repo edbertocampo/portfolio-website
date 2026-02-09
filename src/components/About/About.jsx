@@ -1,61 +1,112 @@
 import React from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { FiCode, FiLayers, FiCpu, FiCheckCircle, FiEdit3, FiUsers, FiBarChart2 } from 'react-icons/fi';
 
 const StyledAboutSection = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 1000px;
+  max-width: var(--section-max-width);
   width: 100%;
-  margin-bottom: 10px;
-  padding: 50px clamp(15px, 5vw, 50px);
+  margin: 0 auto;
+  padding: clamp(50px, 8vh, 100px) var(--section-padding-x);
   transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
 
   .inner {
     display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: clamp(20px, 4vw, 30px);
+    grid-template-columns: 1.5fr 1fr;
+    gap: clamp(25px, 5vw, 45px);
     width: 100%;
+    align-items: flex-start;
     transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
 
     @media (max-width: 1024px) {
       grid-template-columns: 1fr;
-      gap: 30px;
+      gap: clamp(20px, 4vw, 35px);
     }
 
     @media (max-width: 768px) {
       display: flex;
       flex-direction: column-reverse;
-      gap: 20px;
-      padding: 0 10px;
+      gap: clamp(25px, 5vw, 40px);
+    }
+
+    @media (max-width: 480px) {
+      flex-direction: column-reverse;
+      gap: 30px;
+    }
+
+    @media (max-width: 360px) {
+      gap: 12px;
     }
   }
 
   .section-heading {
-    font-size: clamp(24px, 5vw, 32px);
-    margin-bottom: clamp(20px, 4vw, 40px);
+    font-size: clamp(24px, 5vw, 36px);
+    margin-bottom: clamp(25px, 5vh, 45px);
     text-align: center;
+    width: 100%;
 
     @media (max-width: 480px) {
-      text-align: left;
+      font-size: clamp(20px, 4vw, 28px);
+      margin-bottom: clamp(12px, 2.5vh, 20px);
     }
+
+    @media (max-width: 360px) {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: clamp(40px, 6vh, 80px) clamp(10px, 3vw, 25px);
+  }
+
+  @media (max-width: 480px) {
+    padding: clamp(25px, 4vh, 50px) clamp(10px, 3vw, 16px);
+  }
+
+  @media (max-width: 360px) {
+    padding: clamp(25px, 4vh, 50px) clamp(8px, 2vw, 12px);
   }
 `;
 
 const StyledText = styled.div`
   p {
-    font-size: clamp(14px, 1.8vw, 16px);
-    line-height: 1.6;
+    font-size: clamp(13px, 2vw, 18px);
+    line-height: 1.7;
     transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
-    margin-bottom: clamp(10px, 2vw, 15px);
+    margin-bottom: clamp(10px, 2vh, 20px);
+    color: var(--slate);
+    word-break: normal;
+    overflow-wrap: break-word;
+    hyphens: manual;
+
+    @media (max-width: 768px) {
+      font-size: clamp(13px, 1.8vw, 15px);
+      line-height: 1.6;
+      margin-bottom: clamp(8px, 1.5vh, 12px);
+    }
+
+    @media (max-width: 480px) {
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 360px) {
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
   }
 
   .skills-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-    margin-top: 20px;
+    margin-top: clamp(20px, 4vh, 40px);
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
@@ -63,56 +114,128 @@ const StyledText = styled.div`
   }
 
   .skill-category {
-    margin-bottom: 20px;
+    margin-bottom: 0;
 
-    h3 {
-      color: var(--green);
-      font-family: 'Roboto Mono', monospace;
-      font-size: clamp(14px, 1.6vw, 16px);
-      margin-bottom: 10px;
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: clamp(15px, 2vh, 20px);
+      
+      svg {
+        color: var(--green);
+        font-size: clamp(18px, 2.5vw, 22px);
+      }
+      
+      h3 {
+        color: var(--lightest-slate);
+        font-family: var(--font-heading);
+        font-size: clamp(13px, 1.8vw, 16px);
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
+      }
     }
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-
-      li {
-        position: relative;
-        padding-left: 20px;
-        margin-bottom: 8px;
-        font-family: 'Roboto Mono', monospace;
-        font-size: clamp(12px, 1.4vw, 14px);
-        color: var(--slate);
-
-        &:before {
-          content: '▹';
-          position: absolute;
-          left: 0;
-          color: var(--green);
-          font-size: clamp(12px, 1.4vw, 14px);
-          line-height: 12px;
-        }
-      }
+    .badges-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
   }
 `;
 
+const SkillCard = styled(motion.div)`
+  background: rgba(33, 52, 72, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 180, 193, 0.1);
+  border-radius: 12px;
+  padding: clamp(20px, 4vw, 30px);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    background: rgba(33, 52, 72, 0.5);
+    border-color: var(--green);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+  }
+`;
+
+const SkillBadge = styled(motion.span)`
+  background: rgba(148, 180, 193, 0.1);
+  color: var(--slate);
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: clamp(11px, 1.4vw, 13px);
+  font-family: var(--font-heading);
+  border: 1px solid rgba(148, 180, 193, 0.1);
+  transition: all 0.25s ease;
+  cursor: default;
+
+  &:hover {
+    background: rgba(100, 255, 218, 0.1);
+    color: var(--green);
+    border-color: var(--green);
+    transform: scale(1.05);
+  }
+`;
+
+const Word = ({ children, progress, range }) => {
+  const opacity = useTransform(progress, range, [0.25, 1]);
+  const color = useTransform(progress, range, ['var(--slate)', 'var(--lightest-slate)']);
+
+  return (
+    <motion.span style={{ opacity, color, display: 'inline-block', marginRight: '0.25em' }}>
+      {children}
+    </motion.span>
+  );
+};
+
+const TextReveal = ({ text, progress, range }) => {
+  const words = text.split(' ');
+  const amount = range[1] - range[0];
+  const step = amount / words.length;
+
+  return (
+    <>
+      {words.map((word, i) => {
+        const start = range[0] + i * step;
+        const end = range[0] + (i + 1) * step;
+        return (
+          <Word key={i} progress={progress} range={[start, end]}>
+            {word}
+          </Word>
+        );
+      })}
+    </>
+  );
+};
+
 const StyledPic = styled.div`
   position: relative;
-  max-width: 300px;
+  max-width: clamp(200px, 40vw, 350px);
   width: 100%;
-  margin: 50px auto 0;
+  margin: clamp(20px, 4vh, 40px) auto 0;
   transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
 
   @media (max-width: 1024px) {
-    max-width: 300px;
-    margin: 30px auto;
+    max-width: clamp(200px, 50vw, 300px);
+    margin: clamp(15px, 3vh, 30px) auto;
   }
 
   @media (max-width: 768px) {
-    max-width: 60%;
-    margin: 20px auto;
+    max-width: clamp(180px, 70vw, 280px);
+    margin: clamp(10px, 2vh, 20px) auto;
+  }
+
+  @media (max-width: 480px) {
+    max-width: clamp(160px, 80vw, 240px);
+    margin: 10px auto;
   }
 
   .wrapper {
@@ -140,8 +263,8 @@ const StyledPic = styled.div`
       height: 100%;
       border-radius: var(--border-radius);
       border: 2px solid var(--green);
-      top: 14px;
-      left: 14px;
+      top: clamp(8px, 2vw, 14px);
+      left: clamp(8px, 2vw, 14px);
       z-index: -1;
       transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
@@ -153,6 +276,7 @@ const StyledPic = styled.div`
       width: 100%;
       height: auto;
       filter: grayscale(30%);
+      display: block;
 
       &:hover {
         filter: none;
@@ -177,24 +301,23 @@ const item = {
 };
 
 const About = () => {
+  const containerRef = React.useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start 0.35", "start 0.1"]
+  });
+
   const skills = [
-    { category: 'Web Development', skills: ['HTML', 'CSS', 'JavaScript', 'React JS'] },
-    { category: 'Programming', skills: ['Python', 'PHP', 'SQL'] },
-    { category: 'Tools', skills: ['GIT'] },
-    { category: 'QA & Testing', skills: ['Manual Testing'] },
-    { category: 'Business & Design', skills: [
-      'Business Analytics', 
-      'UI/UX Design', 
-      'Graphics Design'
-    ]},
-    { category: 'Soft Skills', skills: [
-      'Attention to Details', 
-      'Organizational Skills'
-    ]}
+    { category: 'Web Development', icon: <FiLayers />, skills: ['HTML', 'CSS', 'JavaScript', 'React JS'] },
+    { category: 'Programming', icon: <FiCode />, skills: ['Python', 'PHP', 'SQL'] },
+    { category: 'Tools', icon: <FiCpu />, skills: ['GIT'] },
+    { category: 'Data Science', icon: <FiBarChart2 />, skills: ['R Language', 'Python'] },
+    { category: 'Business & Design', icon: <FiEdit3 />, skills: ['Analytics', 'UI/UX', 'Graphics'] },
+    { category: 'Soft Skills', icon: <FiUsers />, skills: ['Details', 'Organizational'] }
   ];
 
   return (
-    <StyledAboutSection id="about">
+    <StyledAboutSection id="about" ref={containerRef}>
       <motion.div
         variants={container}
         initial="hidden"
@@ -208,66 +331,42 @@ const About = () => {
           <StyledText>
             <motion.div variants={item}>
               <p>
-                I'm Edbert Ocampo, a passionate professional bridging technology 
-                and business through innovative digital solutions.
+                <TextReveal
+                  text="I'm Edbert, a passionate professional bridging technology and business through innovative digital solutions."
+                  progress={scrollYProgress}
+                  range={[0.1, 0.4]}
+                />
               </p>
               <p style={{ marginTop: '15px' }}>
-                As a technology professional and Professor, I blend technology and business to create 
-                innovative digital solutions across web development, QA, and freelance services.
+                <TextReveal
+                  text="As a technology professional and Professor, I blend technology and business to create innovative digital solutions across web development, Data Science, and freelance services."
+                  progress={scrollYProgress}
+                  range={[0.4, 0.7]}
+                />
               </p>
               <p style={{ marginTop: '15px' }}>
-                My professional toolkit showcases versatility in transforming complex 
-                challenges into elegant, user-centric experiences:
+                <TextReveal
+                  text="My professional toolkit showcases versatility in transforming complex challenges into elegant, user-centric experiences:"
+                  progress={scrollYProgress}
+                  range={[0.7, 0.9]}
+                />
               </p>
               <div className="skills-container">
-                <div>
-                  <div className="skill-category">
-                    <h3>Web Development</h3>
-                    <ul>
-                      <li>HTML</li>
-                      <li>CSS</li>
-                      <li>JavaScript</li>
-                      <li>React JS</li>
-                    </ul>
-                  </div>
-                  <div className="skill-category">
-                    <h3>Programming</h3>
-                    <ul>
-                      <li>Python</li>
-                      <li>PHP</li>
-                      <li>SQL</li>
-                    </ul>
-                  </div>
-                  <div className="skill-category">
-                    <h3>Tools</h3>
-                    <ul>
-                      <li>GIT</li>
-                    </ul>
-                  </div>
-                </div>
-                <div>
-                  <div className="skill-category">
-                    <h3>QA & Testing</h3>
-                    <ul>
-                      <li>Manual Testing</li>
-                    </ul>
-                  </div>
-                  <div className="skill-category">
-                    <h3>Business & Design</h3>
-                    <ul>
-                      <li>Business Analytics</li>
-                      <li>UI/UX Design</li>
-                      <li>Graphics Design</li>
-                    </ul>
-                  </div>
-                  <div className="skill-category">
-                    <h3>Soft Skills</h3>
-                    <ul>
-                      <li>Attention to Details</li>
-                      <li>Organizational Skills</li>
-                    </ul>
-                  </div>
-                </div>
+                {skills.map((category, i) => (
+                  <SkillCard key={i} variants={item}>
+                    <div className="skill-category">
+                      <div className="category-header">
+                        {category.icon}
+                        <h3>{category.category}</h3>
+                      </div>
+                      <div className="badges-container">
+                        {category.skills.map((skill, si) => (
+                          <SkillBadge key={si}>{skill}</SkillBadge>
+                        ))}
+                      </div>
+                    </div>
+                  </SkillCard>
+                ))}
               </div>
             </motion.div>
           </StyledText>
@@ -276,7 +375,7 @@ const About = () => {
             <motion.div variants={item} className="wrapper">
               <img
                 className="img"
-                src="/me.jpg"
+                src="/OCAMPO.png"
                 alt="Headshot"
                 width="100%"
                 height="auto"

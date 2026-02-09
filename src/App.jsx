@@ -9,10 +9,11 @@ import Experience from './components/Experience/Experience';
 import Projects from './components/Projects/Projects';
 import Contact from './components/Contact/Contact';
 import ErrorPage from './components/ErrorPage/ErrorPage';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import SplashScreen from './components/Layout/SplashScreen';
 import MouseFollowBlur from './components/common/MouseFollowBlur';
 import ScrollToTop from './components/common/ScrollToTop';
-import LogoImage from './assets/eo_logo.png';
+import LogoImage from './assets/EO.svg';
 
 const StyledMainContainer = styled.main`
   padding: 0;
@@ -25,11 +26,14 @@ const ContentContainer = styled.div`
   margin: 0 auto;
   padding: 0 clamp(25px, 5vw, 150px);
   width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+  }
 `;
 
 const SectionContainer = styled(motion.div)`
-  scroll-behavior: smooth;
-  overflow-y: auto;
+  /* overflow-y: auto;  <-- REMOVED to fix sticky scroll in Projects */
 `;
 
 const SectionWrapper = styled.div`
@@ -38,28 +42,36 @@ const SectionWrapper = styled.div`
 `;
 
 function App() {
+  const [loading, setLoading] = React.useState(true);
+
   return (
     <Router>
       <div id="root">
         <GlobalStyles />
+        <AnimatePresence>
+          {loading && (
+            <SplashScreen key="splash" finishLoading={() => setLoading(false)} />
+          )}
+        </AnimatePresence>
+
         <MouseFollowBlur />
         <UniversalNavigation logoSrc={LogoImage} />
         <ScrollToTop />
-        
+
         <StyledMainContainer>
           <ContentContainer>
             <SectionContainer
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
+              animate={{ opacity: loading ? 0 : 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
             >
               <Routes>
-                <Route 
-                  path="/" 
+                <Route
+                  path="/"
                   element={
                     <>
                       <SectionWrapper id="home">
-                        <Hero />
+                        <Hero startTyping={!loading} />
                       </SectionWrapper>
                       <SectionWrapper id="about">
                         <About />
@@ -74,7 +86,7 @@ function App() {
                         <Contact />
                       </SectionWrapper>
                     </>
-                  } 
+                  }
                 />
                 <Route path="/about" element={<About />} />
                 <Route path="/experience" element={<Experience />} />
