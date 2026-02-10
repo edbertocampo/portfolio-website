@@ -7,7 +7,7 @@ import BytesToText from '../common/BytesToText';
 import { useState, useEffect } from 'react';
 
 const TypewriterText = ({ startWrapper }) => {
-  const roles = ["Professor.", "Web Developer.", "VA Freelancer."];
+  const roles = ["Lecturer.", "Web Developer.", "VA Freelancer."];
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);

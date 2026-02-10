@@ -347,7 +347,7 @@ const About = () => {
   { category: 'Web Development', icon: <FiLayers />, skills: ['HTML', 'CSS', 'JavaScript', 'React'] },
   { category: 'Programming', icon: <FiCode />, skills: ['Python', 'PHP', 'SQL'] },
   { category: 'Tools', icon: <FiCpu />, skills: ['Git', 'RStudio', 'Looker Studio'] },
-  { category: 'Data & Analytics', icon: <FiBarChart2 />, skills: ['Business Analytics', 'Data Science', 'Data Analysis', 'Statistical Modeling'] },
+  { category: 'Data & Analytics', icon: <FiBarChart2 />, skills: ['Business Analytics', 'Data Science', 'Data Analysis', 'Data Mining'] },
   // { category: 'Design & Visualization', icon: <FiEdit3 />, skills: ['UI/UX', 'Data Visualization', 'Graphic Design'] },
   { category: 'Soft Skills', icon: <FiUsers />, skills: ['Communication', 'Time Management', 'Leadership', 'Adaptability'] },
   ];
@@ -368,21 +368,21 @@ const About = () => {
             <motion.div variants={item}>
               <p>
                 <TextReveal
-                  text="I'm Edbert, a passionate professional bridging technology and business through innovative digital solutions."
+                  text="I’m Edbert, someone who loves turning ideas into meaningful digital experiences, because I know how powerful the right solution can be for people and businesses."
                   progress={scrollYProgress}
                   range={[0.1, 0.4]}
                 />
               </p>
               <p style={{ marginTop: '15px' }}>
                 <TextReveal
-                  text="As a technology professional and Professor, I blend technology and business to create innovative digital solutions across web development, Data Science, and freelance services."
+                  text="As a technology professional and Lecturer, I blend technology and business to create innovative digital solutions across web development, Data Science, and freelance services."
                   progress={scrollYProgress}
                   range={[0.4, 0.7]}
                 />
               </p>
               <p style={{ marginTop: '15px' }}>
                 <TextReveal
-                  text="My professional toolkit showcases versatility in transforming complex challenges into elegant, user-centric experiences:"
+                  text="I thrive on transforming complex challenges into elegant, user-focused solutions, all while continuously learning and inspiring others to do the same."
                   progress={scrollYProgress}
                   range={[0.7, 0.9]}
                 />
@@ -412,7 +412,7 @@ const About = () => {
                 <div className="skill-category">
                   <div className="category-header">
                     {category.icon}
-                    <h3>{category.category}</h3>
+                    <h3 style={{ marginTop: '4px', marginBottom: '4px', textTransform: 'uppercase' }}>{category.category}</h3>
                   </div>
                   <div className="badges-container">
                     {category.skills.map((skill, si) => (
