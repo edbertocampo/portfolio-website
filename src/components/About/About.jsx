@@ -42,6 +42,32 @@ const StyledAboutSection = styled.section`
     }
   }
 
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-top: clamp(30px, 5vh, 50px);
+    grid-auto-flow: dense;
+    grid-auto-rows: minmax(120px, auto);
+
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      margin-top: clamp(18px, 3vh, 30px);
+    }
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* allow selected cards to span columns for Bento composition */
+  .skills-grid .span-2 {
+    grid-column: span 2;
+  }
+
   .section-heading {
     font-size: clamp(24px, 5vw, 36px);
     margin-bottom: clamp(25px, 5vh, 45px);
@@ -102,16 +128,7 @@ const StyledText = styled.div`
     }
   }
 
-  .skills-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-top: clamp(20px, 4vh, 40px);
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-    }
-  }
+  /* skills-container moved below inner as .skills-grid */
 
   .skill-category {
     margin-bottom: 0;
@@ -120,28 +137,32 @@ const StyledText = styled.div`
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: clamp(15px, 2vh, 20px);
-      
+      margin-bottom: clamp(22px, 3.2vh, 30px);
+      width: 100%;
+
       svg {
         color: var(--green);
         font-size: clamp(18px, 2.5vw, 22px);
       }
-      
+
       h3 {
         color: var(--lightest-slate);
         font-family: var(--font-heading);
-        font-size: clamp(13px, 1.8vw, 16px);
-        margin: 0;
+        font-size: clamp(18px, 2.2vw, 20px);
+        margin-bottom: 0;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: 600;
+        letter-spacing: 1.6px;
+        font-weight: 700;
+        line-height: 1.05;
       }
     }
 
     .badges-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 22px 18px;
+      align-items: flex-start;
+      padding-left: 4px;
     }
   }
 `;
@@ -151,12 +172,16 @@ const SkillCard = styled(motion.div)`
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(148, 180, 193, 0.1);
-  border-radius: 12px;
-  padding: clamp(20px, 4vw, 30px);
-  transition: all 0.3s ease;
+  border-radius: 14px;
+  padding: clamp(22px, 3.2vw, 28px) clamp(22px, 3.6vw, 30px);
+  transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  min-height: 140px;
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  background: linear-gradient(180deg, rgba(30,44,58,0.28), rgba(33,52,72,0.36));
+  box-shadow: 0 4px 14px rgba(2,12,27,0.25);
 
   &:hover {
     background: rgba(33, 52, 72, 0.5);
@@ -169,11 +194,21 @@ const SkillCard = styled(motion.div)`
 const SkillBadge = styled(motion.span)`
   background: rgba(148, 180, 193, 0.1);
   color: var(--slate);
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: 99px;
   font-size: clamp(11px, 1.4vw, 13px);
   font-family: var(--font-heading);
   border: 1px solid rgba(148, 180, 193, 0.1);
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
+  margin-top: 6px;
+  margin-right: 12px;
+  margin-bottom: 6px;
+  min-height: 34px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   transition: all 0.25s ease;
   cursor: default;
 
@@ -218,6 +253,7 @@ const TextReveal = ({ text, progress, range }) => {
 
 const StyledPic = styled.div`
   position: relative;
+  align-self: flex-start;
   max-width: clamp(200px, 40vw, 350px);
   width: 100%;
   margin: clamp(20px, 4vh, 40px) auto 0;
@@ -308,12 +344,12 @@ const About = () => {
   });
 
   const skills = [
-    { category: 'Web Development', icon: <FiLayers />, skills: ['HTML', 'CSS', 'JavaScript', 'React JS'] },
-    { category: 'Programming', icon: <FiCode />, skills: ['Python', 'PHP', 'SQL'] },
-    { category: 'Tools', icon: <FiCpu />, skills: ['GIT'] },
-    { category: 'Data Science', icon: <FiBarChart2 />, skills: ['R Language', 'Python'] },
-    { category: 'Business & Design', icon: <FiEdit3 />, skills: ['Analytics', 'UI/UX', 'Graphics'] },
-    { category: 'Soft Skills', icon: <FiUsers />, skills: ['Details', 'Organizational'] }
+  { category: 'Web Development', icon: <FiLayers />, skills: ['HTML', 'CSS', 'JavaScript', 'React'] },
+  { category: 'Programming', icon: <FiCode />, skills: ['Python', 'PHP', 'SQL'] },
+  { category: 'Tools', icon: <FiCpu />, skills: ['Git', 'RStudio', 'Looker Studio'] },
+  { category: 'Data & Analytics', icon: <FiBarChart2 />, skills: ['Business Analytics', 'Data Science', 'Data Analysis', 'Statistical Modeling'] },
+  // { category: 'Design & Visualization', icon: <FiEdit3 />, skills: ['UI/UX', 'Data Visualization', 'Graphic Design'] },
+  { category: 'Soft Skills', icon: <FiUsers />, skills: ['Communication', 'Time Management', 'Leadership', 'Adaptability'] },
   ];
 
   return (
@@ -351,23 +387,7 @@ const About = () => {
                   range={[0.7, 0.9]}
                 />
               </p>
-              <div className="skills-container">
-                {skills.map((category, i) => (
-                  <SkillCard key={i} variants={item}>
-                    <div className="skill-category">
-                      <div className="category-header">
-                        {category.icon}
-                        <h3>{category.category}</h3>
-                      </div>
-                      <div className="badges-container">
-                        {category.skills.map((skill, si) => (
-                          <SkillBadge key={si}>{skill}</SkillBadge>
-                        ))}
-                      </div>
-                    </div>
-                  </SkillCard>
-                ))}
-              </div>
+              {/* moved skills grid below the two-column inner row */}
             </motion.div>
           </StyledText>
 
@@ -382,6 +402,27 @@ const About = () => {
               />
             </motion.div>
           </StyledPic>
+        </div>
+
+        <div className="skills-grid">
+          {skills.map((category, i) => {
+            const spanClass = category.skills.length > 3 ? 'span-2' : '';
+            return (
+              <SkillCard key={i} className={spanClass} variants={item}>
+                <div className="skill-category">
+                  <div className="category-header">
+                    {category.icon}
+                    <h3>{category.category}</h3>
+                  </div>
+                  <div className="badges-container">
+                    {category.skills.map((skill, si) => (
+                      <SkillBadge key={si}>{skill}</SkillBadge>
+                    ))}
+                  </div>
+                </div>
+              </SkillCard>
+            );
+          })}
         </div>
       </motion.div>
     </StyledAboutSection>
