@@ -12,6 +12,7 @@ const StyledAboutSection = styled.section`
   margin: 0 auto;
   padding: clamp(50px, 8vh, 100px) var(--section-padding-x);
   transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+  position: relative;
 
   .inner {
     display: grid;
@@ -20,6 +21,8 @@ const StyledAboutSection = styled.section`
     width: 100%;
     align-items: flex-start;
     transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+    position: relative;
+    z-index: 2;
 
     @media (max-width: 1024px) {
       grid-template-columns: 1fr;
@@ -49,23 +52,26 @@ const StyledAboutSection = styled.section`
     margin-top: clamp(30px, 5vh, 50px);
     grid-auto-flow: dense;
     grid-auto-rows: minmax(120px, auto);
+    position: relative;
+    z-index: 2;
 
     @media (max-width: 1024px) {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 640px) {
       grid-template-columns: 1fr;
       margin-top: clamp(18px, 3vh, 30px);
-    }
-    @media (max-width: 1200px) {
-      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
     }
   }
 
   /* allow selected cards to span columns for Bento composition */
   .skills-grid .span-2 {
     grid-column: span 2;
+    @media (max-width: 640px) {
+      grid-column: span 1;
+    }
   }
 
   .section-heading {
@@ -73,6 +79,8 @@ const StyledAboutSection = styled.section`
     margin-bottom: clamp(25px, 5vh, 45px);
     text-align: center;
     width: 100%;
+    position: relative;
+    z-index: 2;
 
     @media (max-width: 480px) {
       font-size: clamp(20px, 4vw, 28px);
@@ -99,124 +107,146 @@ const StyledAboutSection = styled.section`
 `;
 
 const StyledText = styled.div`
+  position: relative;
+  z-index: 2;
+
   p {
-    font-size: clamp(13px, 2vw, 18px);
-    line-height: 1.7;
+    font-size: clamp(14px, 2.2vw, 18px);
+    line-height: 1.8;
     transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
-    margin-bottom: clamp(10px, 2vh, 20px);
+    margin-bottom: clamp(15px, 2.5vh, 25px);
     color: var(--slate);
     word-break: normal;
     overflow-wrap: break-word;
-    hyphens: manual;
 
     @media (max-width: 768px) {
-      font-size: clamp(13px, 1.8vw, 15px);
-      line-height: 1.6;
-      margin-bottom: clamp(8px, 1.5vh, 12px);
-    }
-
-    @media (max-width: 480px) {
-      font-size: 13px;
-      line-height: 1.6;
-      margin-bottom: 8px;
-    }
-
-    @media (max-width: 360px) {
-      font-size: 12px;
-      line-height: 1.5;
-      margin-bottom: 6px;
-    }
-  }
-
-  /* skills-container moved below inner as .skills-grid */
-
-  .skill-category {
-    margin-bottom: 0;
-
-    .category-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: clamp(22px, 3.2vh, 30px);
-      width: 100%;
-
-      svg {
-        color: var(--green);
-        font-size: clamp(18px, 2.5vw, 22px);
-      }
-
-      h3 {
-        color: var(--lightest-slate);
-        font-family: var(--font-heading);
-        font-size: clamp(18px, 2.2vw, 20px);
-        margin-bottom: 0;
-        text-transform: uppercase;
-        letter-spacing: 1.6px;
-        font-weight: 700;
-        line-height: 1.05;
-      }
-    }
-
-    .badges-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 22px 18px;
-      align-items: flex-start;
-      padding-left: 4px;
+      font-size: clamp(14px, 1.8vw, 16px);
+      line-height: 1.7;
     }
   }
 `;
 
 const SkillCard = styled(motion.div)`
-  background: rgba(33, 52, 72, 0.4);
+  position: relative;
+  z-index: 2;
+  background: rgba(30, 44, 58, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(148, 180, 193, 0.1);
-  border-radius: 14px;
-  padding: clamp(22px, 3.2vw, 28px) clamp(22px, 3.6vw, 30px);
-  transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-  min-height: 140px;
+  border-radius: 12px;
+  padding: clamp(25px, 3.5vw, 35px);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  background: linear-gradient(180deg, rgba(30,44,58,0.28), rgba(33,52,72,0.36));
-  box-shadow: 0 4px 14px rgba(2,12,27,0.25);
+  overflow: hidden;
+  box-shadow: 0 8px 32px 0 rgba(2, 12, 27, 0.2);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(100, 255, 218, 0.05) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
 
   &:hover {
-    background: rgba(33, 52, 72, 0.5);
-    border-color: var(--green);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+    transform: translateY(-8px);
+    border-color: rgba(100, 255, 218, 0.3);
+    box-shadow: 0 15px 45px -15px rgba(2, 12, 27, 0.8),
+                0 0 20px rgba(100, 255, 218, 0.1);
+    
+    &::before {
+      opacity: 1;
+    }
+
+    .category-icon {
+      color: var(--green);
+      transform: scale(1.1) rotate(5deg);
+    }
+  }
+
+  .skill-category {
+    position: relative;
+    z-index: 1;
+  }
+
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+
+    @media (max-width: 480px) {
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .category-icon {
+      color: var(--slate);
+      font-size: 20px;
+      transition: all 0.4s ease;
+
+      @media (max-width: 480px) {
+        font-size: 18px;
+      }
+    }
+
+    h3 {
+      color: var(--lightest-slate);
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      @media (max-width: 480px) {
+        font-size: 12px;
+        letter-spacing: 1px;
+      }
+    }
+  }
+
+  .badges-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 `;
 
 const SkillBadge = styled(motion.span)`
-  background: rgba(148, 180, 193, 0.1);
+  background: rgba(148, 180, 193, 0.05);
   color: var(--slate);
-  padding: 8px 16px;
-  border-radius: 99px;
-  font-size: clamp(11px, 1.4vw, 13px);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
   font-family: var(--font-heading);
   border: 1px solid rgba(148, 180, 193, 0.1);
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
-  white-space: nowrap;
-  margin-top: 6px;
-  margin-right: 12px;
-  margin-bottom: 6px;
-  min-height: 34px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  transition: all 0.25s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: default;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 480px) {
+    padding: 4px 10px;
+    font-size: 11px;
+    border-radius: 4px;
+  }
 
   &:hover {
-    background: rgba(100, 255, 218, 0.1);
+    background: rgba(100, 255, 218, 0.08);
     color: var(--green);
-    border-color: var(--green);
-    transform: scale(1.05);
+    border-color: rgba(100, 255, 218, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px -5px rgba(100, 255, 218, 0.2);
   }
 `;
 
@@ -253,73 +283,82 @@ const TextReveal = ({ text, progress, range }) => {
 
 const StyledPic = styled.div`
   position: relative;
-  align-self: flex-start;
-  max-width: clamp(200px, 40vw, 350px);
+  align-self: center;
+  max-width: clamp(240px, 40vw, 380px);
   width: 100%;
-  margin: clamp(20px, 4vh, 40px) auto 0;
-  transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
-
-  @media (max-width: 1024px) {
-    max-width: clamp(200px, 50vw, 300px);
-    margin: clamp(15px, 3vh, 30px) auto;
-  }
-
-  @media (max-width: 768px) {
-    max-width: clamp(180px, 70vw, 280px);
-    margin: clamp(10px, 2vh, 20px) auto;
-  }
-
-  @media (max-width: 480px) {
-    max-width: clamp(160px, 80vw, 240px);
-    margin: 10px auto;
-  }
+  margin: 0 auto;
+  z-index: 2;
 
   .wrapper {
     display: block;
     position: relative;
     width: 100%;
-    border-radius: var(--border-radius);
-    transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+    border-radius: 12px;
+    background-color: var(--green);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(100, 255, 218, 0.2), transparent 70%);
+      border-radius: 12px;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
 
-    &:hover,
-    &:focus {
-      outline: 0;
-      transform: translate(-4px, -4px);
-
-      &:after {
-        transform: translate(8px, 8px);
+    &:hover {
+      &::before {
+        opacity: 1;
       }
     }
 
+    /* Side border effect */
     &:after {
       content: '';
       display: block;
       position: absolute;
       width: 100%;
       height: 100%;
-      border-radius: var(--border-radius);
-      border: 2px solid var(--green);
-      top: clamp(8px, 2vw, 14px);
-      left: clamp(8px, 2vw, 14px);
+      border-radius: 12px;
+      border: 2px solid rgba(100, 255, 218, 0.5);
+      top: 15px;
+      left: 15px;
       z-index: -1;
-      transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
 
     .img {
       position: relative;
-      border-radius: var(--border-radius);
-      transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+      border-radius: 12px;
       width: 100%;
       height: auto;
-      filter: grayscale(30%);
+      filter: grayscale(40%) contrast(1.1) brightness(0.9);
+      mix-blend-mode: normal;
       display: block;
+      transition: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+      background-color: transparent;
+    }
 
-      &:hover {
-        filter: none;
-      }
+    &:hover .img {
+      filter: grayscale(0%) contrast(1) brightness(1);
     }
   }
 `;
+
+const BackgroundAccent = styled.div`
+  position: absolute;
+  top: 20%;
+  right: -5%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(100, 255, 218, 0.03) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+`;
+
+
 
 const container = {
   hidden: { opacity: 0 },
@@ -338,22 +377,25 @@ const item = {
 
 const About = () => {
   const containerRef = React.useRef(null);
+  const skills = [
+    { category: 'Web Development', icon: <FiLayers />, skills: ['HTML', 'CSS', 'JavaScript', 'React'] },
+    { category: 'Programming', icon: <FiCode />, skills: ['Python', 'PHP', 'SQL'] },
+    { category: 'Tools', icon: <FiCpu />, skills: ['Git', 'RStudio', 'Looker Studio'] },
+    { category: 'Data & Analytics', icon: <FiBarChart2 />, skills: ['Business Analytics', 'Data Science', 'Data Analysis', 'Data Mining'] },
+    { category: 'Soft Skills', icon: <FiUsers />, skills: ['Communication', 'Time Management', 'Leadership', 'Adaptability'] },
+  ];
+
+  const profileImage = '/OCAMPO.png';
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start 0.35", "start 0.1"]
   });
 
-  const skills = [
-  { category: 'Web Development', icon: <FiLayers />, skills: ['HTML', 'CSS', 'JavaScript', 'React'] },
-  { category: 'Programming', icon: <FiCode />, skills: ['Python', 'PHP', 'SQL'] },
-  { category: 'Tools', icon: <FiCpu />, skills: ['Git', 'RStudio', 'Looker Studio'] },
-  { category: 'Data & Analytics', icon: <FiBarChart2 />, skills: ['Business Analytics', 'Data Science', 'Data Analysis', 'Data Mining'] },
-  // { category: 'Design & Visualization', icon: <FiEdit3 />, skills: ['UI/UX', 'Data Visualization', 'Graphic Design'] },
-  { category: 'Soft Skills', icon: <FiUsers />, skills: ['Communication', 'Time Management', 'Leadership', 'Adaptability'] },
-  ];
-
   return (
     <StyledAboutSection id="about" ref={containerRef}>
+      <BackgroundAccent />
+
       <motion.div
         variants={container}
         initial="hidden"
@@ -373,50 +415,57 @@ const About = () => {
                   range={[0.1, 0.4]}
                 />
               </p>
-              <p style={{ marginTop: '15px' }}>
+              <p>
                 <TextReveal
                   text="As a technology professional and Lecturer, I blend technology and business to create innovative digital solutions across web development, Data Science, and freelance services."
                   progress={scrollYProgress}
                   range={[0.4, 0.7]}
                 />
               </p>
-              <p style={{ marginTop: '15px' }}>
+              <p>
                 <TextReveal
                   text="I thrive on transforming complex challenges into elegant, user-focused solutions, all while continuously learning and inspiring others to do the same."
                   progress={scrollYProgress}
                   range={[0.7, 0.9]}
                 />
               </p>
-              {/* moved skills grid below the two-column inner row */}
             </motion.div>
           </StyledText>
 
           <StyledPic>
-            <motion.div variants={item} className="wrapper">
+            <div className="wrapper">
               <img
                 className="img"
-                src="/OCAMPO.png"
-                alt="Headshot"
+                src={profileImage}
+                alt="Edbert Ocampo"
                 width="100%"
                 height="auto"
               />
-            </motion.div>
+            </div>
           </StyledPic>
         </div>
 
         <div className="skills-grid">
           {skills.map((category, i) => {
-            const spanClass = category.skills.length > 3 ? 'span-2' : '';
+            const isSpan2 = category.skills.length > 3 || i === 0;
+            const spanClass = isSpan2 ? 'span-2' : '';
+
             return (
               <SkillCard key={i} className={spanClass} variants={item}>
                 <div className="skill-category">
                   <div className="category-header">
-                    {category.icon}
-                    <h3 style={{ marginTop: '4px', marginBottom: '4px', textTransform: 'uppercase' }}>{category.category}</h3>
+                    <span className="category-icon">{category.icon}</span>
+                    <h3>{category.category}</h3>
                   </div>
                   <div className="badges-container">
                     {category.skills.map((skill, si) => (
-                      <SkillBadge key={si}>{skill}</SkillBadge>
+                      <SkillBadge
+                        key={si}
+                        whileHover={{ y: -2 }}
+                        transition={{ type: 'spring', stiffness: 300 }}
+                      >
+                        {skill}
+                      </SkillBadge>
                     ))}
                   </div>
                 </div>

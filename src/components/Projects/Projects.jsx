@@ -442,28 +442,52 @@ const StyledSectionHeading = styled.div`
 `;
 
 const StyledProjectItem = styled.div`
-  background: rgba(33, 52, 72, 0.4);
+  position: relative;
+  background: rgba(30, 44, 58, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(234, 224, 207, 0.1);
-  border-radius: 16px;
+  border: 1px solid rgba(148, 180, 193, 0.1);
+  border-radius: 20px;
   padding: 40px;
   width: 100%;
   height: 100%;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1),
-              inset 0 0 0 1px rgba(234, 224, 207, 0.05);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(100, 255, 218, 0.05) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
 
   &:hover {
-    background: rgba(33, 52, 72, 0.5);
-    border-color: rgba(234, 224, 207, 0.2);
-    transform: translateY(-2px);
+    transform: translateY(-8px);
+    border-color: rgba(100, 255, 218, 0.3);
+    box-shadow: 0 15px 45px -15px rgba(2, 12, 27, 0.8),
+                0 0 20px rgba(100, 255, 218, 0.1);
+    
+    &::before {
+      opacity: 1;
+    }
+
+    .folder-icon {
+      color: var(--green);
+      transform: scale(1.1) rotate(5deg);
+    }
   }
 
   .project-content {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -486,7 +510,8 @@ const StyledProjectHeader = styled.div`
   margin-bottom: 30px;
 
   .folder-icon {
-    color: var(--green);
+    color: var(--slate);
+    transition: all 0.4s ease;
     svg {
       width: 40px;
       height: 40px;
@@ -543,19 +568,24 @@ const StyledTechList = styled.ul`
   list-style: none;
 
   li {
-    color: var(--lightest-slate);
+    background: rgba(148, 180, 193, 0.05);
+    color: var(--slate);
+    padding: 6px 14px;
+    border-radius: 12px;
     font-size: 11px;
     font-family: var(--font-heading);
-    background-color: rgba(148, 180, 193, 0.15);
-    padding: 6px 14px;
-    border-radius: 99px;
     border: 1px solid rgba(148, 180, 193, 0.1);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: default;
     letter-spacing: 0.5px;
     text-transform: uppercase;
     
     &:hover {
-      background-color: rgba(148, 180, 193, 0.25);
-      border-color: rgba(148, 180, 193, 0.3);
+      background: rgba(100, 255, 218, 0.08);
+      color: var(--green);
+      border-color: rgba(100, 255, 218, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px -5px rgba(100, 255, 218, 0.2);
     }
   }
 `;

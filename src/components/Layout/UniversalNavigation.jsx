@@ -60,8 +60,105 @@ const SectionPinText = styled(motion.h2)`
   opacity: ${props => props.show ? 1 : 0};
   transition: opacity 0.3s ease;
   
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     display: none;
+  }
+`;
+
+const ScrollIndicatorContainer = styled(motion.div)`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 52px;
+  background: rgba(33, 52, 72, 0.4);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 8px 15px;
+  transform: scale(0.8);
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+`;
+
+const ProgressRing = styled.svg`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  rect {
+    fill: none;
+    stroke-width: 2;
+    rx: 16;
+    ry: 16;
+  }
+
+  .bg {
+    stroke: rgba(148, 180, 193, 0.1);
+  }
+
+  .fg {
+    stroke: var(--green);
+    stroke-dasharray: 460;
+    stroke-dashoffset: ${props => 460 - (props.progress * 460)};
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    filter: drop-shadow(0 0 8px rgba(100, 255, 218, 0.4));
+  }
+`;
+
+const IndicatorContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 1px;
+  color: var(--slate);
+  font-family: var(--font-heading);
+  z-index: 2;
+
+  .label {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--green);
+    opacity: 0.8;
+    text-align: center;
+    width: 100%;
+  }
+
+  .counter {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 15px;
+    font-weight: 900;
+    color: var(--lightest-slate);
+
+    .current {
+      position: relative;
+      height: 18px;
+      overflow: hidden;
+      width: 22px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .divider {
+      opacity: 0.3;
+      font-weight: 300;
+      font-size: 14px;
+    }
+
+    .total {
+      opacity: 0.3;
+      font-size: 14px;
+    }
   }
 `;
 
@@ -188,6 +285,7 @@ const UniversalNavigation = ({ logoSrc }) => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [showSectionName, setShowSectionName] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const observerRefs = useRef({});
 
   const scrollToSection = (sectionId) => {
@@ -206,48 +304,49 @@ const UniversalNavigation = ({ logoSrc }) => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(currentScrollY / totalHeight);
       setShowSectionName(currentScrollY > 100);
-
       setIsNavVisible(currentScrollY < 100 || currentScrollY < lastScrollY);
-
-      const observerOptions = {
-        root: null,
-        rootMargin: '-50px 0px -50% 0px',
-        threshold: [0.3, 0.5, 0.7]
-      };
-
-      const handleIntersect = (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.3) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      };
-
-      const observer = new IntersectionObserver(handleIntersect, observerOptions);
-
-      sections.forEach(section => {
-        const element = document.getElementById(section.id);
-        if (element) {
-          observer.observe(element);
-          observerRefs.current[section.id] = element;
-        }
-      });
-
       setLastScrollY(currentScrollY);
-
-      return () => {
-        sections.forEach(section => {
-          const element = observerRefs.current[section.id];
-          if (element) observer.unobserve(element);
-        });
-      };
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-45% 0px -45% 0px', // Center-focused detection
+      threshold: 0
+    };
+
+    const handleIntersect = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+
+    sections.forEach(section => {
+      const element = document.getElementById(section.id);
+      if (element) {
+        observer.observe(element);
+        observerRefs.current[section.id] = element;
+      }
+    });
+
+    return () => {
+      sections.forEach(section => {
+        const element = observerRefs.current[section.id];
+        if (element) observer.unobserve(element);
+      });
+    };
+  }, []);
 
   // Prevent scroll when mobile menu is open
   useEffect(() => {
@@ -295,7 +394,38 @@ const UniversalNavigation = ({ logoSrc }) => {
                 ))}
               </NavLinks>
             )}
-            <SectionPinText show={showSectionName}>{currentSectionName}</SectionPinText>
+            {showSectionName && (
+              <ScrollIndicatorContainer
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ type: "spring", stiffness: 100, damping: 20 }}
+              >
+                <ProgressRing progress={scrollProgress} viewBox="0 0 180 52">
+                  <rect className="bg" x="2" y="2" width="176" height="48" />
+                  <rect className="fg" x="2" y="2" width="176" height="48" />
+                </ProgressRing>
+                <IndicatorContent>
+                  <span className="label">{currentSectionName}</span>
+                  <div className="counter">
+                    <div className="current">
+                      <AnimatePresence mode="wait">
+                        <motion.span
+                          key={activeSection}
+                          initial={{ y: 15, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          exit={{ y: -15, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+                        >
+                          {String(sections.findIndex(s => s.id === activeSection) + 1).padStart(2, '0')}
+                        </motion.span>
+                      </AnimatePresence>
+                    </div>
+                    <span className="divider">/</span>
+                    <span className="total">{String(sections.length).padStart(2, '0')}</span>
+                  </div>
+                </IndicatorContent>
+              </ScrollIndicatorContainer>
+            )}
 
             <MobileMenuButton onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? <FiX /> : <FiMenu />}

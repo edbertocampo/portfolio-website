@@ -299,9 +299,9 @@ const item = {
   show: { opacity: 1, y: 0 },
 };
 
-const Hero = ({ startTyping = true }) => {
+const Hero = ({ startTyping = true, id }) => {
   return (
-    <StyledHeroSection>
+    <StyledHeroSection id={id}>
       <motion.div
         variants={container}
         initial="hidden"

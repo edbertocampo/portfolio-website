@@ -25,8 +25,15 @@ const StickyWrapper = styled.div`
   padding: 0 var(--section-padding-x);
   overflow: hidden;
 
+  @media (max-width: 768px) {
+    padding: 0 15px;
+  }
+
   .section-heading {
     margin-bottom: 25px;
+    @media (max-width: 480px) {
+      margin-bottom: 15px;
+    }
   }
 `;
 
@@ -92,19 +99,27 @@ const TimelineWindow = styled.div`
 const TimelineContainer = styled(motion.div)`
   position: relative;
   width: 100%;
-  padding-left: 30px;
+  padding-left: 90px;
   padding-top: 40px;
   padding-bottom: 100px;
+
+  @media (max-width: 480px) {
+    padding-left: 70px;
+  }
 
   &::before {
     content: '';
     position: absolute;
-    left: 7px;
+    left: 72px;
     top: 0;
     width: 2px;
     height: 100%;
     background: linear-gradient(180deg, var(--green) 0%, rgba(234, 224, 207, 0.1) 100%);
     border-radius: 1px;
+
+    @media (max-width: 480px) {
+      left: 52px;
+    }
   }
 `;
 
@@ -120,7 +135,7 @@ const TimelineItem = styled(motion.div)`
 
 const TimelineMarker = styled.div`
   position: absolute;
-  left: -30px;
+  left: -25px;
   top: 15px;
   width: 16px;
   height: 16px;
@@ -128,7 +143,27 @@ const TimelineMarker = styled.div`
   background: var(--navy);
   border: 4px solid var(--green);
   z-index: 2;
-  box-shadow: 0 0 10px rgba(234, 224, 207, 0.2);
+  box-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+`;
+
+const TimelineYear = styled.div`
+  position: absolute;
+  left: -105px;
+  top: 13px;
+  width: 65px;
+  text-align: right;
+  color: var(--lightest-slate);
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  opacity: 0.8;
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+    width: 45px;
+    left: -80px;
+  }
 `;
 
 const TimelineCard = styled.div`
@@ -171,6 +206,29 @@ const TimelineCard = styled.div`
     letter-spacing: 1px;
     margin-bottom: 8px;
     border: 1px solid rgba(148, 180, 193, 0.1);
+
+    @media (max-width: 480px) {
+      font-size: 9px;
+      padding: 2px 8px;
+    }
+  }
+
+  h3 {
+    margin-bottom: 6px;
+    font-size: clamp(16px, 3vw, 20px);
+    color: var(--lightest-slate);
+    
+    @media (max-width: 480px) {
+      font-size: 16px;
+    }
+
+    .company {
+      color: var(--green);
+      font-size: 0.9em;
+      @media (max-width: 480px) {
+        font-size: 0.85em;
+      }
+    }
   }
 
   .range {
@@ -187,9 +245,18 @@ const TimelineCard = styled.div`
     margin-bottom: 20px;
     font-weight: 500;
     
+    @media (max-width: 480px) {
+      font-size: 11px;
+      padding: 5px 10px;
+      margin-bottom: 15px;
+    }
+
     svg {
       color: var(--green);
       font-size: 14px;
+      @media (max-width: 480px) {
+        font-size: 12px;
+      }
     }
   }
 
@@ -205,6 +272,11 @@ const TimelineCard = styled.div`
       line-height: 1.5;
       font-size: 14px;
       color: var(--slate);
+
+      @media (max-width: 480px) {
+        font-size: 13px;
+        padding-left: 15px;
+      }
 
       &:before {
         content: '▹';
@@ -375,6 +447,7 @@ const Experience = () => {
           }}>
             {professionalJourney.map((item, i) => (
               <TimelineItem key={`prof-${i}`}>
+                <TimelineYear>{item.range.match(/\d{4}/)?.[0] || ""}</TimelineYear>
                 <TimelineMarker />
                 <TimelineCard>
                   <span className="type-badge">{item.type}</span>
@@ -405,6 +478,7 @@ const Experience = () => {
           }}>
             {academicJourney.map((item, i) => (
               <TimelineItem key={`acad-${i}`}>
+                <TimelineYear>{item.range.match(/\d{4}/)?.[0] || ""}</TimelineYear>
                 <TimelineMarker />
                 <TimelineCard>
                   <span className="type-badge">{item.type}</span>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiGithub, FiLinkedin, FiMail, FiDownload, FiClock } from 'react-icons/fi';
+import EmailModal from './EmailModal';
 
 const StyledContactSection = styled.section`
   max-width: 600px;
@@ -80,7 +81,7 @@ const StyledDescription = styled(motion.p)`
   }
 `;
 
-const StyledButton = styled(motion.a)`
+const StyledButton = styled(motion.button)`
   display: inline-block;
   padding: clamp(12px, 2vh, 20px) clamp(20px, 3vw, 28px);
   background-color: transparent;
@@ -308,6 +309,7 @@ const item = {
 
 const Contact = () => {
   const [phTime, setPhTime] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -351,7 +353,7 @@ const Contact = () => {
         </StyledDescription>
 
         <StyledButton
-          href="mailto:edbert.ocampo123@gmail.com"
+          onClick={() => setIsModalOpen(true)}
           variants={item}
         >
           Say Hello
@@ -390,6 +392,12 @@ const Contact = () => {
           Download My Resume <FiDownload />
         </ResumeLink>
       </motion.div>
+
+      <EmailModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        defaultTo="02.ocampo.edbert@gmail.com"
+      />
     </StyledContactSection>
   );
 };

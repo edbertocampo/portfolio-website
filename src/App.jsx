@@ -47,6 +47,7 @@ function App() {
   return (
     <Router>
       <div id="root">
+        <MouseFollowBlur />
         <GlobalStyles />
         <AnimatePresence>
           {loading && (
@@ -54,7 +55,6 @@ function App() {
           )}
         </AnimatePresence>
 
-        <MouseFollowBlur />
         <UniversalNavigation logoSrc={LogoImage} />
         <ScrollToTop />
 
@@ -70,19 +70,19 @@ function App() {
                   path="/"
                   element={
                     <>
-                      <SectionWrapper id="home">
-                        <Hero startTyping={!loading} />
+                      <SectionWrapper>
+                        <Hero startTyping={!loading} id="home" />
                       </SectionWrapper>
-                      <SectionWrapper id="about">
+                      <SectionWrapper>
                         <About />
                       </SectionWrapper>
-                      <SectionWrapper id="experience">
+                      <SectionWrapper>
                         <Experience />
                       </SectionWrapper>
-                      <SectionWrapper id="projects">
+                      <SectionWrapper>
                         <Projects />
                       </SectionWrapper>
-                      <SectionWrapper id="contact">
+                      <SectionWrapper>
                         <Contact />
                       </SectionWrapper>
                     </>
