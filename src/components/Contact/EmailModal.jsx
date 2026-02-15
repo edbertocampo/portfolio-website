@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiSend, FiTrash2 } from 'react-icons/fi';
@@ -213,6 +213,17 @@ const EmailModal = ({ isOpen, onClose, defaultTo }) => {
   const [error, setError] = useState(null);
   const [isFromEditing, setIsFromEditing] = useState(true);
 
+  // Reset form when modal opens or closes
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({ from: '', subject: '', message: '' });
+      setError(null);
+      setIsSending(false);
+      setIsSent(false);
+      setIsFromEditing(true);
+    }
+  }, [isOpen]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -220,8 +231,15 @@ const EmailModal = ({ isOpen, onClose, defaultTo }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSending(true);
     setError(null);
+
+    // Filter out same-email sending
+    if (formData.from.toLowerCase().trim() === defaultTo.toLowerCase().trim()) {
+      setError("You cannot send a message to your own email address. Please use a different sender email.");
+      return;
+    }
+
+    setIsSending(true);
 
     const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
     const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
