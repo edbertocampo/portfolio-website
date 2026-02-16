@@ -167,20 +167,38 @@ const TimelineYear = styled.div`
 `;
 
 const TimelineCard = styled.div`
-  background: rgba(33, 52, 72, 0.4);
+  position: relative;
+  background: rgba(30, 44, 58, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(234, 224, 207, 0.1);
-  border-radius: 16px;
+  border: 1px solid rgba(148, 180, 193, 0.1);
+  border-radius: 12px;
   padding: clamp(20px, 4vw, 30px);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1),
-              inset 0 0 0 1px rgba(234, 224, 207, 0.05);
-  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 8px 32px 0 rgba(2, 12, 27, 0.2);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(100, 255, 218, 0.05) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
 
   &:hover {
-    background: rgba(33, 52, 72, 0.5);
-    border-color: rgba(234, 224, 207, 0.2);
-    transform: translateX(5px);
+    transform: translateY(-5px);
+    border-color: rgba(100, 255, 218, 0.3);
+    box-shadow: 0 15px 45px -15px rgba(2, 12, 27, 0.8),
+                0 0 20px rgba(100, 255, 218, 0.1);
+    
+    &::before {
+      opacity: 1;
+    }
   }
 
   h3 {
@@ -195,9 +213,11 @@ const TimelineCard = styled.div`
   }
 
   .type-badge {
+    position: relative;
+    z-index: 1;
     display: inline-block;
     padding: 3px 10px;
-    border-radius: 99px;
+    border-radius: 6px;
     background: rgba(148, 180, 193, 0.1);
     color: var(--slate);
     font-size: 10px;
@@ -206,6 +226,13 @@ const TimelineCard = styled.div`
     letter-spacing: 1px;
     margin-bottom: 8px;
     border: 1px solid rgba(148, 180, 193, 0.1);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(100, 255, 218, 0.08);
+      color: var(--green);
+      border-color: rgba(100, 255, 218, 0.4);
+    }
 
     @media (max-width: 480px) {
       font-size: 9px;
