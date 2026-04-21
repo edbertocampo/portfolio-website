@@ -9,11 +9,14 @@ import Experience from './components/Experience/Experience';
 import Projects from './components/Projects/Projects';
 import Contact from './components/Contact/Contact';
 import ErrorPage from './components/ErrorPage/ErrorPage';
+import CurvedLoop from './components/common/CurvedLoop/CurvedLoop';
 import { AnimatePresence, motion } from 'framer-motion';
 import SplashScreen from './components/Layout/SplashScreen';
 import MouseFollowBlur from './components/common/MouseFollowBlur';
 import ScrollToTop from './components/common/ScrollToTop';
 import LogoImage from './assets/EO.svg';
+import GradualBlur from './components/common/GradualBlur/GradualBlur';
+import CommandLauncher from './components/CommandLauncher/CommandLauncher';
 
 const StyledMainContainer = styled.main`
   padding: 0;
@@ -38,7 +41,7 @@ const SectionContainer = styled(motion.div)`
 
 const SectionWrapper = styled.div`
   
-  padding-top: 30px;
+  padding-top: 10px;
 `;
 
 function App() {
@@ -56,46 +59,40 @@ function App() {
         </AnimatePresence>
 
         <UniversalNavigation logoSrc={LogoImage} />
+        <CommandLauncher />
         <ScrollToTop />
+        {/* <GradualBlur
+          target="page"
+          position="bottom"
+          height="12vh"
+          strength={3}
+          divCount={10}
+          curve="bezier"
+          exponential={true}
+          opacity={1}
+          zIndex={9999}
+        /> */}
 
         <StyledMainContainer>
-          <ContentContainer>
-            <SectionContainer
-              initial={{ opacity: 0 }}
-              animate={{ opacity: loading ? 0 : 1 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-            >
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <>
-                      <SectionWrapper>
-                        <Hero startTyping={!loading} id="home" />
-                      </SectionWrapper>
-                      <SectionWrapper>
-                        <About />
-                      </SectionWrapper>
-                      <SectionWrapper>
-                        <Experience />
-                      </SectionWrapper>
-                      <SectionWrapper>
-                        <Projects />
-                      </SectionWrapper>
-                      <SectionWrapper>
-                        <Contact />
-                      </SectionWrapper>
-                    </>
-                  }
-                />
-                <Route path="/about" element={<About />} />
-                <Route path="/experience" element={<Experience />} />
-                <Route path="/projects" element={<Projects />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="*" element={<ErrorPage />} />
-              </Routes>
-            </SectionContainer>
-          </ContentContainer>
+          <SectionContainer
+            initial={{ opacity: 0 }}
+            animate={{ opacity: loading ? 0 : 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Hero startTyping={!loading} id="home" />
+                }
+              />
+              <Route path="/about" element={<ContentContainer><About /></ContentContainer>} />
+              <Route path="/experience" element={<ContentContainer><Experience /></ContentContainer>} />
+              <Route path="/projects" element={<ContentContainer><Projects /></ContentContainer>} />
+              <Route path="/contact" element={<ContentContainer><Contact /></ContentContainer>} />
+              <Route path="*" element={<ErrorPage />} />
+            </Routes>
+          </SectionContainer>
         </StyledMainContainer>
       </div>
     </Router>

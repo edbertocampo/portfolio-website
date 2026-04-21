@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FiCode, FiLayers, FiCpu, FiCheckCircle, FiEdit3, FiUsers, FiBarChart2 } from 'react-icons/fi';
+import BorderGlow from '../BorderGlow/BorderGlow';
+// import Lanyard from '../common/Lanyard/Lanyard';
+import ProfileCard from '../common/ProfileCard/ProfileCard';
 
 const StyledAboutSection = styled.section`
   display: flex;
@@ -10,7 +13,7 @@ const StyledAboutSection = styled.section`
   max-width: var(--section-max-width);
   width: 100%;
   margin: 0 auto;
-  padding: clamp(50px, 8vh, 100px) var(--section-padding-x);
+  padding: clamp(20px, 4vh, 60px) var(--section-padding-x);
   transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
   position: relative;
 
@@ -37,7 +40,7 @@ const StyledAboutSection = styled.section`
 
     @media (max-width: 480px) {
       flex-direction: column-reverse;
-      gap: 30px;
+      gap: 15px; // Reduced gap for mobile
     }
 
     @media (max-width: 360px) {
@@ -49,7 +52,7 @@ const StyledAboutSection = styled.section`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 22px;
-    margin-top: clamp(30px, 5vh, 50px);
+    margin-top: clamp(80px, 12vh, 120px);
     grid-auto-flow: dense;
     grid-auto-rows: minmax(120px, auto);
     position: relative;
@@ -61,7 +64,7 @@ const StyledAboutSection = styled.section`
 
     @media (max-width: 640px) {
       grid-template-columns: 1fr;
-      margin-top: clamp(18px, 3vh, 30px);
+      margin-top: clamp(30px, 5vh, 50px); // Significantly reduced for mobile
       gap: 16px;
     }
   }
@@ -129,41 +132,21 @@ const StyledText = styled.div`
 const SkillCard = styled(motion.div)`
   position: relative;
   z-index: 2;
-  background: rgba(30, 44, 58, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(148, 180, 193, 0.1);
-  border-radius: 12px;
-  padding: clamp(25px, 3.5vw, 35px);
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 8px 32px 0 rgba(2, 12, 27, 0.2);
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  
+  .border-glow-card {
     height: 100%;
-    background: linear-gradient(135deg, rgba(100, 255, 218, 0.05) 0%, transparent 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
+  }
+
+  .border-glow-inner {
+    padding: clamp(25px, 3.5vw, 35px);
+    height: 100%;
   }
 
   &:hover {
     transform: translateY(-8px);
-    border-color: rgba(100, 255, 218, 0.3);
-    box-shadow: 0 15px 45px -15px rgba(2, 12, 27, 0.8),
-                0 0 20px rgba(100, 255, 218, 0.1);
     
-    &::before {
-      opacity: 1;
-    }
-
     .category-icon {
       color: var(--green);
       transform: scale(1.1) rotate(5deg);
@@ -251,7 +234,7 @@ const SkillBadge = styled(motion.span)`
 `;
 
 const Word = ({ children, progress, range }) => {
-  const opacity = useTransform(progress, range, [0.25, 1]);
+  const opacity = useTransform(progress, range, [0.15, 1]);
   const color = useTransform(progress, range, ['var(--slate)', 'var(--lightest-slate)']);
 
   return (
@@ -282,67 +265,58 @@ const TextReveal = ({ text, progress, range }) => {
 };
 
 const StyledPic = styled.div`
+  z-index: 10;
+  pointer-events: none;
   position: relative;
-  align-self: center;
-  max-width: clamp(240px, 40vw, 380px);
   width: 100%;
-  margin: 0 auto;
-  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 500px;
+  
+  & > div {
+    pointer-events: auto;
+  }
 
-  .wrapper {
-    display: block;
-    position: relative;
-    width: 100%;
-    border-radius: 12px;
-    background-color: var(--green);
-    
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 50% 0%, rgba(100, 255, 218, 0.2), transparent 70%);
-      border-radius: 12px;
-      z-index: 2;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
+  @media (min-width: 1025px) {
+    position: absolute;
+    top: -30px;
+    height: 900px;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 10;
+  }
 
-    &:hover {
-      &::before {
-        opacity: 1;
-      }
-    }
+  @media (max-width: 1024px) {
+    height: 600px;
+    margin-top: 0;
+    margin-bottom: 0px;
+  }
 
-    /* Side border effect */
-    &:after {
-      content: '';
-      display: block;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 12px;
-      border: 2px solid rgba(100, 255, 218, 0.5);
-      top: 15px;
-      left: 15px;
-      z-index: -1;
-      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    }
+  @media (max-width: 480px) {
+    height: 450px;
+  }
+`;
 
-    .img {
-      position: relative;
-      border-radius: 12px;
-      width: 100%;
-      height: auto;
-      filter: grayscale(40%) contrast(1.1) brightness(0.9);
-      mix-blend-mode: normal;
-      display: block;
-      transition: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
-      background-color: transparent;
-    }
+const StyledCardContainer = styled(motion.div)`
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+  margin-top: -60px;
 
-    &:hover .img {
-      filter: grayscale(0%) contrast(1) brightness(1);
-    }
+  @media (max-width: 1024px) {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
 `;
 
@@ -386,11 +360,16 @@ const About = () => {
   ];
 
   const profileImage = '/OCAMPO.png';
+  const lanyardRef = React.useRef(null);
+  const bioRef = React.useRef(null);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start 0.35", "start 0.1"]
+  const { scrollYProgress: lanyardScroll } = useScroll({
+    target: bioRef,
+    offset: ["start 0.9", "end 0.6"]
   });
+
+  const lanyardY = useTransform(lanyardScroll, [0, 0.5, 1], [-20, -10, 4.5]);
+  const lanyardOpacity = useTransform(lanyardScroll, [0, 0.2, 0.5], [0, 0.5, 1]);
 
   return (
     <StyledAboutSection id="about" ref={containerRef}>
@@ -403,46 +382,67 @@ const About = () => {
         viewport={{ once: true }}
       >
         <motion.h2 variants={item} className="section-heading">
-          About Me
+          ~/about
         </motion.h2>
+
+
+        {/* <StyledPic
+          as={motion.div}
+          ref={lanyardRef}
+          style={{ 
+            opacity: lanyardOpacity,
+          }}
+        >
+          <Lanyard cardImage={profileImage} scrollY={lanyardY} eventSource={containerRef} />
+        </StyledPic> */}
+
         <div className="inner">
-          <StyledText>
+          <StyledText ref={bioRef}>
             <motion.div variants={item}>
               <p>
                 <TextReveal
                   text="I’m Edbert, someone who loves turning ideas into meaningful digital experiences, because I know how powerful the right solution can be for people and businesses."
-                  progress={scrollYProgress}
+                  progress={lanyardScroll}
                   range={[0.1, 0.4]}
                 />
               </p>
               <p>
                 <TextReveal
                   text="As a technology professional and Lecturer, I blend technology and business to create innovative digital solutions across web development, Data Science, and freelance services."
-                  progress={scrollYProgress}
+                  progress={lanyardScroll}
                   range={[0.4, 0.7]}
                 />
               </p>
               <p>
                 <TextReveal
                   text="I thrive on transforming complex challenges into elegant, user-focused solutions, all while continuously learning and inspiring others to do the same."
-                  progress={scrollYProgress}
+                  progress={lanyardScroll}
                   range={[0.7, 0.9]}
                 />
               </p>
             </motion.div>
           </StyledText>
 
-          <StyledPic>
-            <div className="wrapper">
-              <img
-                className="img"
-                src={profileImage}
-                alt="Edbert Ocampo"
-                width="100%"
-                height="auto"
-              />
-            </div>
-          </StyledPic>
+          <StyledCardContainer variants={item}>
+            <ProfileCard
+              name="Edbert Ocampo"
+              title="Lecturer & Technology Professional"
+              handle="edbertocampo"
+              status="Available for Work"
+              contactText="Get in Touch"
+              avatarUrl={profileImage}
+              showUserInfo={true}
+              enableTilt={true}
+              enableMobileTilt={true}
+              onContactClick={() => {
+                const contactSection = document.getElementById('contact');
+                if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
+              }}
+              behindGlowEnabled={true}
+              innerGradient="linear-gradient(145deg, rgba(10, 25, 47, 0.9) 0%, rgba(100, 255, 218, 0.1) 100%)"
+              behindGlowColor="rgba(100, 255, 218, 0.4)"
+            />
+          </StyledCardContainer>
         </div>
 
         <div className="skills-grid">
@@ -452,28 +452,41 @@ const About = () => {
 
             return (
               <SkillCard key={i} className={spanClass} variants={item}>
-                <div className="skill-category">
-                  <div className="category-header">
-                    <span className="category-icon">{category.icon}</span>
-                    <h3>{category.category}</h3>
+                <BorderGlow
+                  backgroundColor="rgba(30, 44, 58, 0.4)"
+                  borderRadius={12}
+                  glowColor="164 100 69"
+                  colors={['#64ffda', '#48bfe3', '#0096c7']}
+                  glowRadius={30}
+                  fillOpacity={0.1}
+                  coneSpread={10}
+                  glowIntensity={2}
+                  animated={true}
+                >
+                  <div className="skill-category">
+                    <div className="category-header">
+                      <span className="category-icon">{category.icon}</span>
+                      <h3>{category.category}</h3>
+                    </div>
+                    <div className="badges-container">
+                      {category.skills.map((skill, si) => (
+                        <SkillBadge
+                          key={si}
+                          whileHover={{ y: -2 }}
+                          transition={{ type: 'spring', stiffness: 300 }}
+                        >
+                          {skill}
+                        </SkillBadge>
+                      ))}
+                    </div>
                   </div>
-                  <div className="badges-container">
-                    {category.skills.map((skill, si) => (
-                      <SkillBadge
-                        key={si}
-                        whileHover={{ y: -2 }}
-                        transition={{ type: 'spring', stiffness: 300 }}
-                      >
-                        {skill}
-                      </SkillBadge>
-                    ))}
-                  </div>
-                </div>
+                </BorderGlow>
               </SkillCard>
             );
           })}
         </div>
       </motion.div>
+
     </StyledAboutSection>
   );
 };

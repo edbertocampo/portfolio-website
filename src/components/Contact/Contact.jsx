@@ -7,7 +7,7 @@ import EmailModal from './EmailModal';
 const StyledContactSection = styled.section`
   max-width: 600px;
   margin: 0 auto;
-  padding: 100px var(--section-padding-x);
+  padding: 40px var(--section-padding-x);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -16,7 +16,7 @@ const StyledContactSection = styled.section`
   transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
 
   @media (max-width: 768px) {
-    padding: 80px var(--section-padding-x);
+    padding: 30px var(--section-padding-x);
   }
 
   @media (max-width: 480px) {
@@ -345,7 +345,7 @@ const Contact = () => {
         </StyledOverline>
 
         <StyledTitle variants={item}>
-          Get In Touch
+          ~/contact
         </StyledTitle>
 
         <StyledDescription variants={item}>
@@ -375,12 +375,6 @@ const Contact = () => {
             aria-label="LinkedIn"
           >
             <FiLinkedin />
-          </a>
-          <a
-            href="mailto:edbert.ocampo123@gmail.com"
-            aria-label="Email"
-          >
-            <FiMail />
           </a>
         </SocialLinks>
 

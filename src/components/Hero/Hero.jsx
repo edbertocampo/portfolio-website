@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiDownload } from 'react-icons/fi';
 import BytesToText from '../common/BytesToText';
+import FaultyTerminal from '../common/FaultyTerminal/FaultyTerminal';
 
 import { useState, useEffect } from 'react';
 
@@ -59,34 +60,45 @@ const TypewriterText = ({ startWrapper }) => {
     </span>
   );
 };
+const StyledHeroContainer = styled.div`
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--navy);
+`;
+
+const BackgroundWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.5;
+  
+  /* Smooth transition to the next section */
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+`;
+
 const StyledHeroSection = styled.section`
+  position: relative;
+  z-index: 2;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: flex-start;
   min-height: 100vh;
-  padding: 0 var(--section-padding-x);
-  max-width: var(--section-max-width);
+  padding: 0 clamp(25px, 5vw, 150px);
+  max-width: 1200px;
   margin: 0 auto;
   width: 100%;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 100px var(--section-padding-x) 60px;
+    padding: 100px 20px 60px;
     min-height: auto;
     display: block;
-  }
-
-  @media (max-width: 480px) {
-    padding: 60px var(--section-padding-x) 30px;
-  }
-
-  @media (max-width: 360px) {
-    padding: 60px var(--section-padding-x) 40px;
-  }
-
-  @media (max-width: 320px) {
-    padding: 50px var(--section-padding-x) 30px;
   }
 `;
 
@@ -301,7 +313,23 @@ const item = {
 
 const Hero = ({ startTyping = true, id }) => {
   return (
-    <StyledHeroSection id={id}>
+    <StyledHeroContainer>
+      <BackgroundWrapper>
+        <FaultyTerminal 
+          scale={1.5}
+          digitSize={1.2}
+          timeScale={0.5}
+          noiseAmp={1}
+          brightness={0.6}
+          scanlineIntensity={0.5}
+          curvature={0.1}
+          mouseStrength={0.5}
+          tint="#547792"
+          mouseReact={true}
+          pageLoadAnimation={true}
+        />
+      </BackgroundWrapper>
+      <StyledHeroSection id={id}>
       <motion.div
         variants={container}
         initial="hidden"
@@ -328,7 +356,8 @@ const Hero = ({ startTyping = true, id }) => {
           Download Resume
         </StyledResumeButton>
       </motion.div>
-    </StyledHeroSection>
+      </StyledHeroSection>
+    </StyledHeroContainer>
   );
 };
 

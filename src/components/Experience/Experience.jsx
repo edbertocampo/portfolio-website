@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FiCalendar } from 'react-icons/fi';
+import BorderGlow from '../BorderGlow/BorderGlow';
 
 const StyledExperienceSection = styled.section`
   position: relative;
@@ -168,37 +169,22 @@ const TimelineYear = styled.div`
 
 const TimelineCard = styled.div`
   position: relative;
-  background: rgba(30, 44, 58, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(148, 180, 193, 0.1);
-  border-radius: 12px;
-  padding: clamp(20px, 4vw, 30px);
-  box-shadow: 0 8px 32px 0 rgba(2, 12, 27, 0.2);
+  height: 100%;
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+  
+  .border-glow-card {
     height: 100%;
-    background: linear-gradient(135deg, rgba(100, 255, 218, 0.05) 0%, transparent 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
+  }
+
+  .experience-card-content {
+    position: relative;
+    z-index: 1;
+    padding: clamp(20px, 4vw, 30px);
+    height: 100%;
   }
 
   &:hover {
     transform: translateY(-5px);
-    border-color: rgba(100, 255, 218, 0.3);
-    box-shadow: 0 15px 45px -15px rgba(2, 12, 27, 0.8),
-                0 0 20px rgba(100, 255, 218, 0.1);
-    
-    &::before {
-      opacity: 1;
-    }
   }
 
   h3 {
@@ -432,7 +418,7 @@ const Experience = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          My Journey
+          ~/journey
         </motion.h2>
 
         <TabList>
@@ -477,18 +463,32 @@ const Experience = () => {
                 <TimelineYear>{item.range.match(/\d{4}/)?.[0] || ""}</TimelineYear>
                 <TimelineMarker />
                 <TimelineCard>
-                  <span className="type-badge">{item.type}</span>
-                  <h3>
-                    {item.title} <span className="company">@ {item.company}</span>
-                  </h3>
-                  <span className="range">
-                    <FiCalendar /> {item.range}
-                  </span>
-                  <ul>
-                    {item.duties.map((duty, j) => (
-                      <li key={j}>{duty}</li>
-                    ))}
-                  </ul>
+                  <BorderGlow
+                    backgroundColor="rgba(30, 44, 58, 0.4)"
+                    borderRadius={12}
+                    glowColor="164 100 69"
+                    colors={['#64ffda', '#48bfe3', '#0096c7']}
+                    glowRadius={30}
+                    fillOpacity={0.1}
+                    coneSpread={10}
+                    glowIntensity={2}
+                    animated={true}
+                  >
+                    <div className="experience-card-content">
+                      <span className="type-badge">{item.type}</span>
+                      <h3>
+                        {item.title} <span className="company">@ {item.company}</span>
+                      </h3>
+                      <span className="range">
+                        <FiCalendar /> {item.range}
+                      </span>
+                      <ul>
+                        {item.duties.map((duty, j) => (
+                          <li key={j}>{duty}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </BorderGlow>
                 </TimelineCard>
               </TimelineItem>
             ))}
@@ -508,18 +508,32 @@ const Experience = () => {
                 <TimelineYear>{item.range.match(/\d{4}/)?.[0] || ""}</TimelineYear>
                 <TimelineMarker />
                 <TimelineCard>
-                  <span className="type-badge">{item.type}</span>
-                  <h3>
-                    {item.title} <span className="company">@ {item.company}</span>
-                  </h3>
-                  <span className="range">
-                    <FiCalendar /> {item.range}
-                  </span>
-                  <ul>
-                    {item.duties.map((duty, j) => (
-                      <li key={j}>{duty}</li>
-                    ))}
-                  </ul>
+                  <BorderGlow
+                    backgroundColor="rgba(30, 44, 58, 0.4)"
+                    borderRadius={12}
+                    glowColor="164 100 69"
+                    colors={['#64ffda', '#48bfe3', '#0096c7']}
+                    glowRadius={30}
+                    fillOpacity={0.1}
+                    coneSpread={10}
+                    glowIntensity={2}
+                    animated={true}
+                  >
+                    <div className="experience-card-content">
+                      <span className="type-badge">{item.type}</span>
+                      <h3>
+                        {item.title} <span className="company">@ {item.company}</span>
+                      </h3>
+                      <span className="range">
+                        <FiCalendar /> {item.range}
+                      </span>
+                      <ul>
+                        {item.duties.map((duty, j) => (
+                          <li key={j}>{duty}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </BorderGlow>
                 </TimelineCard>
               </TimelineItem>
             ))}

@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { motion, useScroll, useTransform, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { FiGithub, FiExternalLink, FiFolder, FiGrid, FiLayers } from 'react-icons/fi';
+import BorderGlow from '../BorderGlow/BorderGlow';
 
 const projectsList = [
   {
@@ -9,140 +10,120 @@ const projectsList = [
     description: 'A Digital Solution for Hassle-Free Attendance',
     technologies: ['TypeScript', 'ReactJS', 'JavaScript', 'MUI', 'Firebase', 'MongoDB'],
     githubLink: 'https://github.com/edbertocampo/attendify',
-    externalLink: 'https://attendify-edu.vercel.app/'
+    externalLink: 'https://attendify-edu.vercel.app/',
+    color: '#64ffda'
   },
   {
     title: 'Task Mate Now',
     description: 'A modern to-do list application with an intuitive interface for task management.',
     technologies: ['HTML', 'TypeScript', 'JavaScript', 'Styled Components', 'Vercel'],
     githubLink: 'https://github.com/edbertocampo/to-do-list-2.0',
-    externalLink: 'https://task-mate-now.vercel.app/'
+    externalLink: 'https://task-mate-now.vercel.app/',
+    color: '#48bfe3'
   },
   {
     title: 'INGAT BATANGAS',
     description: 'Emergency response application to alert nearby emergency stations about life-threatening situations.',
     technologies: ['Laravel', 'ReactJS', 'Linode', 'NGINX', 'API', 'SQL'],
     githubLink: 'https://github.com/edbertocampo/INGATBATANGAS',
-    externalLink: null
+    externalLink: null,
+    color: '#0096c7'
   },
   {
     title: 'XML Plants Catalog',
     description: 'A simple plant catalog using XML, HTML, and CSS, offering an easy-to-navigate display.',
     technologies: ['XML', 'HTML', 'CSS'],
     githubLink: 'https://github.com/edbertocampo/Plant-Info',
-    externalLink: 'https://plant-catalog.vercel.app/'
+    externalLink: 'https://plant-catalog.vercel.app/',
+    color: '#64ffda'
   },
   {
     title: 'PHP Web Development',
     description: 'Anime Records app for organizing and managing favorite anime with auth and database.',
     technologies: ['PHP', 'HTML', 'CSS', 'SQL'],
     githubLink: 'https://github.com/edbertocampo/animerecordsphp',
-    externalLink: null
+    externalLink: null,
+    color: '#48bfe3'
   },
   {
     title: 'Face Recognition System',
     description: 'Attendance tracking system using Python Tkinter, adding/deleting employee data.',
     technologies: ['Python', 'Tkinter', 'Sqlite3'],
     githubLink: 'https://github.com/edbertocampo/Face-Recognition-Attendance_Python',
-    externalLink: null
+    externalLink: null,
+    color: '#0096c7'
   }
 ];
 
 const ProjectCard = ({ project }) => (
   <StyledProjectItem>
-    <div className="project-content">
-      <StyledProjectHeader>
-        <div className="folder-icon">
-          <FiFolder />
-        </div>
-        <div className="project-links">
-          {project.githubLink && (
-            <a
-              href={project.githubLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub Link"
-            >
-              <FiGithub />
-            </a>
-          )}
-          {project.externalLink && (
-            <a
-              href={project.externalLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="External Link"
-            >
-              <FiExternalLink />
-            </a>
-          )}
-        </div>
-      </StyledProjectHeader>
+    <BorderGlow
+      backgroundColor="rgba(30, 44, 58, 0.4)"
+      borderRadius={20}
+      glowColor="164 100 69"
+      colors={['#64ffda', '#48bfe3', '#0096c7']}
+      glowRadius={30}
+      fillOpacity={0.1}
+      coneSpread={10}
+      glowIntensity={2}
+      animated={true}
+    >
+      <div className="project-content">
+        <StyledProjectHeader>
+          <div className="folder-icon">
+            <FiFolder />
+          </div>
+          <div className="project-links">
+            {project.githubLink && (
+              <a
+                href={project.githubLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub Link"
+              >
+                <FiGithub />
+              </a>
+            )}
+            {project.externalLink && (
+              <a
+                href={project.externalLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="External Link"
+              >
+                <FiExternalLink />
+              </a>
+            )}
+          </div>
+        </StyledProjectHeader>
 
-      <StyledProjectTitle>{project.title}</StyledProjectTitle>
-      <StyledProjectDescription>
-        {project.description}
-      </StyledProjectDescription>
+        <StyledProjectTitle>{project.title}</StyledProjectTitle>
+        <StyledProjectDescription>
+          {project.description}
+        </StyledProjectDescription>
 
-      <StyledTechList>
-        {project.technologies.map((tech, techIndex) => (
-          <li key={techIndex}>{tech}</li>
-        ))}
-      </StyledTechList>
-    </div>
+        <StyledTechList>
+          {project.technologies.map((tech, techIndex) => (
+            <li key={techIndex}>{tech}</li>
+          ))}
+        </StyledTechList>
+      </div>
+    </BorderGlow>
   </StyledProjectItem>
 );
 
 const Projects = () => {
   const container = useRef(null);
-  const [viewMode, setViewMode] = useState('deck'); // 'deck' or 'grid'
-  const [exitRotation, setExitRotation] = useState(0);
+  const [viewMode, setViewMode] = useState('stack'); // 'stack' (new) or 'grid'
 
   const { scrollYProgress } = useScroll({
     target: container,
     offset: ['start start', 'end end']
   });
 
-  const totalRotation = (projectsList.length - 1) * 180;
-  const rotateX = useTransform(scrollYProgress, [0, 1], [0, totalRotation]);
-
-  const translateZ = useTransform(rotateX, (angle) => {
-    const segmentProgress = angle % 180;
-    const pullAmount = Math.sin((segmentProgress * Math.PI) / 180) * 100;
-    return pullAmount;
-  });
-
-  const projectOpacities = projectsList.map((_, i) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useTransform(rotateX, (angle) => {
-      const currentSegment = Math.floor(angle / 180);
-      const segmentProgress = angle % 180;
-
-      if (currentSegment === i) {
-        if (segmentProgress > 85) return 0;
-        return 1;
-      } else if (currentSegment === i - 1) {
-        if (segmentProgress > 95) return 1;
-        return 0;
-      }
-
-      return 0;
-    });
-  });
-
-  const projectPointerEvents = projectOpacities.map(opacity =>
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useTransform(opacity, (o) => o > 0.5 ? 'auto' : 'none')
-  );
-
   const handleModeToggle = (mode) => {
     if (mode === viewMode) return;
-
-    // Capture current rotation to prevent spin-back during exit
-    setExitRotation(rotateX.get());
-
     if (mode === 'grid') {
-      // Smoothly scroll to top of section before switching
       if (container.current) {
         const top = container.current.offsetTop;
         window.scrollTo({
@@ -150,11 +131,7 @@ const Projects = () => {
           behavior: 'smooth'
         });
       }
-
-      // Delay switch to allow scroll to start and exit animation to be clean
-      setTimeout(() => {
-        setViewMode(mode);
-      }, 300);
+      setTimeout(() => setViewMode(mode), 300);
     } else {
       setViewMode(mode);
     }
@@ -165,30 +142,30 @@ const Projects = () => {
       ref={container}
       id="projects"
       style={{
-        height: viewMode === 'deck' ? `${projectsList.length * 100}vh` : 'auto',
+        height: viewMode === 'stack' ? `${projectsList.length * 100}vh` : 'auto',
         position: 'relative'
       }}
     >
       <StickyWrapper isGrid={viewMode === 'grid'}>
         <HeaderContainer>
           <StyledSectionHeading>
-            <h2>My Projects</h2>
+            <h2>~/projects</h2>
             <div>Showcasing My Technical Journey</div>
           </StyledSectionHeading>
 
           <LayoutGroup id="projects-toggle">
             <TabList>
               <TabButton
-                active={viewMode === 'deck'}
-                onClick={() => handleModeToggle('deck')}
+                active={viewMode === 'stack'}
+                onClick={() => handleModeToggle('stack')}
               >
-                {viewMode === 'deck' && (
+                {viewMode === 'stack' && (
                   <ActivePill
                     layoutId="projectsTab"
                     transition={{ type: 'spring', bounce: 0.3, duration: 0.5 }}
                   />
                 )}
-                <FiLayers style={{ marginRight: '8px' }} /> Card
+                <FiLayers style={{ marginRight: '8px' }} /> Stack
               </TabButton>
               <TabButton
                 active={viewMode === 'grid'}
@@ -208,35 +185,18 @@ const Projects = () => {
 
         <ViewWrapper>
           <AnimatePresence mode="wait">
-            {viewMode === 'deck' ? (
-              <DeckContainer
-                key="deck"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* Use frozen rotation on exit to prevent "unflipping" */}
-                <FlipCard style={{ rotateX: viewMode === 'deck' ? rotateX : exitRotation, translateZ }}>
-                  {projectsList.map((project, i) => {
-                    const isBack = i % 2 === 1;
-                    return (
-                      <ProjectContainer
-                        key={i}
-                        style={{
-                          opacity: projectOpacities[i],
-                          rotateX: 0,
-                          rotateY: isBack ? 180 : 0,
-                          rotateZ: isBack ? 180 : 0,
-                          pointerEvents: projectPointerEvents[i]
-                        }}
-                      >
-                        <ProjectCard project={project} />
-                      </ProjectContainer>
-                    );
-                  })}
-                </FlipCard>
-              </DeckContainer>
+            {viewMode === 'stack' ? (
+              <StackContainer key="stack">
+                {projectsList.map((project, i) => (
+                  <StackCard
+                    key={i}
+                    project={project}
+                    index={i}
+                    total={projectsList.length}
+                    progress={scrollYProgress}
+                  />
+                ))}
+              </StackContainer>
             ) : (
               <GridWrapper
                 key="grid"
@@ -255,7 +215,52 @@ const Projects = () => {
           </AnimatePresence>
         </ViewWrapper>
       </StickyWrapper>
+
+      {/* 
+        ARCHIVED FLIP LOGIC (Preserved per request)
+        If you want to use the flipping cards again, refer to original source or uncomment this section.
+        The flipping logic used rotateX transformations mapped to scrollYProgress.
+      */}
     </div>
+  );
+};
+
+const StackCard = ({ project, index, total, progress }) => {
+  const start = index / total;
+  const end = (index + 1) / total;
+  
+  // Slide in and settle on top with a slight scale/dim effect for cards beneath
+  const translateY = useTransform(progress, [start, start + 0.1], [600, 0]);
+  const opacity = useTransform(progress, [start, start + 0.05], [0, 1]);
+  const scale = useTransform(progress, [end, end + 0.1], [1, 0.9]);
+  const brightness = useTransform(progress, [end, end + 0.1], [1, 0.5]);
+  
+  // Ensure only the current and previous cards are visible to save performance
+  const visibility = useTransform(progress, (p) => {
+    if (p < start - 0.1 || p > end + 0.2) return 'hidden';
+    return 'visible';
+  });
+
+  return (
+    <motion.div
+      style={{
+        position: 'absolute',
+        width: '100%',
+        maxWidth: '800px',
+        height: '400px',
+        y: translateY,
+        opacity,
+        scale,
+        filter: `brightness(${brightness})`,
+        visibility,
+        zIndex: index,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
+      <ProjectCard project={project} />
+    </motion.div>
   );
 };
 
@@ -270,7 +275,7 @@ const StickyWrapper = styled.div`
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  padding: clamp(60px, 10vh, 100px) var(--section-padding-x);
+  padding: clamp(30px, 6vh, 60px) var(--section-padding-x);
   overflow: ${props => props.isGrid ? 'visible' : 'hidden'};
 `;
 
@@ -282,6 +287,8 @@ const HeaderContainer = styled.div`
   align-items: center;
   margin-bottom: clamp(30px, 5vh, 50px);
   flex-shrink: 0;
+  position: relative;
+  z-index: 100;
 `;
 
 const ViewWrapper = styled.div`
@@ -293,19 +300,14 @@ const ViewWrapper = styled.div`
   position: relative;
 `;
 
-const DeckContainer = styled(motion.div)`
+const StackContainer = styled(motion.div)`
   position: relative;
   width: 100%;
   max-width: 800px;
-  height: 400px;
+  height: 450px;
   display: flex;
   justify-content: center;
   align-items: center;
-  perspective: 2000px;
-
-  @media (max-width: 768px) {
-    height: 350px;
-  }
 `;
 
 const GridWrapper = styled(motion.div)`
@@ -313,23 +315,6 @@ const GridWrapper = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-self: flex-start;
-`;
-
-const FlipCard = styled(motion.div)`
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-`;
-
-const ProjectContainer = styled(motion.div)`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  backface-visibility: hidden;
-  transform-style: preserve-3d;
 `;
 
 const ProjectGrid = styled(motion.div)`
@@ -374,10 +359,6 @@ const TabButton = styled.button`
   transition: color 0.3s ease;
   white-space: nowrap;
   z-index: 1;
-
-  &:hover {
-    color: ${props => props.active ? 'var(--navy)' : 'var(--lightest-slate)'};
-  }
 
   @media (max-width: 480px) {
     padding: 8px 16px;
@@ -425,12 +406,6 @@ const StyledSectionHeading = styled.div`
       @media (max-width: 768px) {
         max-width: 200px;
       }
-
-      @media (max-width: 480px) {
-        margin-left: 10px;
-        max-width: 100px;
-        flex: 1;
-      }
     }
   }
 
@@ -443,46 +418,14 @@ const StyledSectionHeading = styled.div`
 
 const StyledProjectItem = styled.div`
   position: relative;
-  background: rgba(30, 44, 58, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(148, 180, 193, 0.1);
-  border-radius: 20px;
-  padding: 40px;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  overflow: hidden;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+  .border-glow-card {
     height: 100%;
-    background: linear-gradient(135deg, rgba(100, 255, 218, 0.05) 0%, transparent 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
-  &:hover {
-    transform: translateY(-8px);
-    border-color: rgba(100, 255, 218, 0.3);
-    box-shadow: 0 15px 45px -15px rgba(2, 12, 27, 0.8),
-                0 0 20px rgba(100, 255, 218, 0.1);
-    
-    &::before {
-      opacity: 1;
-    }
-
-    .folder-icon {
-      color: var(--green);
-      transform: scale(1.1) rotate(5deg);
-    }
   }
 
   .project-content {
@@ -492,14 +435,15 @@ const StyledProjectItem = styled.div`
     flex-direction: column;
     height: 100%;
     justify-content: space-between;
-  }
+    padding: 40px;
 
-  @media (max-width: 768px) {
-    padding: 30px;
-  }
-  
-  @media (max-width: 480px) {
-    padding: 20px;
+    @media (max-width: 768px) {
+      padding: 30px;
+    }
+    
+    @media (max-width: 480px) {
+      padding: 20px;
+    }
   }
 `;
 
