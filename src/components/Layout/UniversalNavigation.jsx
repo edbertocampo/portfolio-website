@@ -418,6 +418,15 @@ const UniversalNavigation = ({ logoSrc }) => {
 
   const currentSectionName = sections.find(section => section.id === activeSection)?.name || '';
 
+  useEffect(() => {
+    const path = location.pathname.replace('/', '');
+    if (path) {
+      setActiveSection(path);
+    } else {
+      setActiveSection('home');
+    }
+  }, [location.pathname]);
+
   return (
     <NavigationContainer>
       <AnimatePresence>
@@ -442,7 +451,13 @@ const UniversalNavigation = ({ logoSrc }) => {
               <Logo
                 src={logoSrc}
                 alt="Edbert Ocampo Logo"
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                onClick={() => {
+                  if (location.pathname === '/') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  } else {
+                    navigate('/');
+                  }
+                }}
               />
               {!showSectionName && (
                 <NavLinks>
